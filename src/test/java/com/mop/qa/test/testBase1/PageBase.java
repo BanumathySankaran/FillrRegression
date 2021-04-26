@@ -523,10 +523,11 @@ public class PageBase {
 				capabilities.setCapability("appPackage", this.appPackage);
 				capabilities.setCapability("appActivity", this.appActivity);
 				capabilities.setCapability("instrumentApp", false);
-				capabilities.setCapability("accessKey", accessKey);
 				capabilities.setCapability("autoAcceptAlerts", true);
 				capabilities.setCapability("autoDismissAlerts", true);
 				capabilities.setCapability("autoGrantPermissions", true);
+				capabilities.setCapability("unicodeKeyboard", true);
+				capabilities.setCapability("resetKeyboard", true);
 				capabilities.setCapability("testName", getAppProperties("projectName"));
 				PageBase.appiumDriver = (AppiumDriver<WebElement>) new AndroidDriver<WebElement>(new URL(url),
 						(Capabilities) capabilities);
@@ -556,97 +557,7 @@ public class PageBase {
 		return PageBase.appiumDriver;
 	}
 
-	public RemoteWebDriver launchSite(String browser, String locality, String url) throws Exception {
-		if (locality.equalsIgnoreCase("Hub")) {
-			if (browser.equalsIgnoreCase("chrome")) {
-				this.chromeDriverPath = getAppProperties("chromeDriverPath");
-				System.setProperty("webdriver.chrome.driver", this.chromeDriverPath);
-				ChromeOptions options = new ChromeOptions();
-				options.addArguments(new String[] { "--disable-extensions" });
-				options.addArguments(new String[] { "--test-type" });
-				options.addArguments(new String[] { "start-maximized" });
-				this.remoteDriver = (RemoteWebDriver) new ChromeDriver(options);
-				this.remoteDriver.manage().window().maximize();
-				System.out.println("chrome started");
-			} else if (browser.equalsIgnoreCase("firefox")) {
-				System.out.println("came here");
-				this.remoteDriver = (RemoteWebDriver) new FirefoxDriver();
-				this.remoteDriver.manage().window().maximize();
-			} else if (browser.equalsIgnoreCase("IE")) {
-				DesiredCapabilities caps = DesiredCapabilities.internetExplorer();
-				caps.setCapability("ie.ensureCleanSession", true);
-				caps.setCapability("ignoreProtectedModeSettings", true);
-				caps.setCapability("enableElementCacheCleanup", true);
-				this.IEDriverPath = getAppProperties("ieDriverPath");
-				System.setProperty("webdriver.ie.driver", this.IEDriverPath);
-				System.out.println("ie driver");
-				this.remoteDriver = (RemoteWebDriver) new InternetExplorerDriver();
-				this.remoteDriver.manage().window().maximize();
-			}
-		} else if (locality.equalsIgnoreCase("Grid")) {
-			if (!url.equalsIgnoreCase("NA")) {
-				System.out.println("remote started");
-				if (browser.equalsIgnoreCase("chrome")) {
-					DesiredCapabilities caps = DesiredCapabilities.chrome();
-					caps.setCapability("browserName", "chrome");
-					caps.setCapability("version", Integer.valueOf(60));
-					caps.setCapability("platform", "Vista");
-					caps.setCapability("username", "imetestcloud");
-					caps.setCapability("accesskey", "f56f6516-3056-4aac-8ff5-03e40719fe59");
-					this.remoteDriver = new RemoteWebDriver(new URL(url), (Capabilities) caps);
-					this.remoteDriver.manage().window().maximize();
-				} else if (browser.equalsIgnoreCase("firefox")) {
-					String NodeURL = url;
-					DesiredCapabilities capa = DesiredCapabilities.firefox();
-					capa.setBrowserName("firefox");
-					capa.setPlatform(Platform.ANY);
-					this.remoteDriver = new RemoteWebDriver(new URL(NodeURL), (Capabilities) capa);
-					this.remoteDriver.manage().window().maximize();
-				} else if (browser.equalsIgnoreCase("IE")) {
-					String NodeURL = url;
-					DesiredCapabilities caps = DesiredCapabilities.internetExplorer();
-					caps.setBrowserName("internet explorer");
-					caps.setPlatform(Platform.ANY);
-					this.remoteDriver = new RemoteWebDriver(new URL(NodeURL), (Capabilities) caps);
-					this.remoteDriver.manage().window().maximize();
-				}
-			} else {
-				String mobileCloud = getAppProperties("mobileCloud");
-				if (mobileCloud.equalsIgnoreCase("No")) {
-					DesiredCapabilities capabilities = DesiredCapabilities.firefox();
-					capabilities.setPlatform(Platform.MAC);
-					capabilities.setVersion("41");
-					capabilities.setCapability("username", "Vignesh.Parameswari@cognizant.com");
-					capabilities.setCapability("password", "VmlnbmVzaC5QYXJhbWVzd2FyaUBjb2duaXphbnQuY29tOg==");
-					capabilities.setCapability("packagename", "HMHDemo");
-					capabilities.setCapability("servicerequestid", "SR-01302-160624-0000664");
-					this.remoteDriver = new RemoteWebDriver(new URL("http://fastpaasinchnp1.cognizant.com/wd/hub"),
-							(Capabilities) capabilities);
-				} else {
-					String mobileHost = getAppProperties("mobileCloudHost");
-					DesiredCapabilities capabilities = new DesiredCapabilities("mobileChrome", "", Platform.ANY);
-					capabilities.setCapability("user", "Ramya.Santhanam@cognizant.com");
-					capabilities.setCapability("password", "Password-1");
-					capabilities.setCapability("deviceName", "0728FA70");
-					this.remoteDriver = new RemoteWebDriver(
-							new URL("https://" + mobileHost + "/nexperience/perfectomobile/wd/hub"),
-							(Capabilities) capabilities);
-					this.remoteDriver.get("https://my-review-cert.hrw.com/dashboard/home");
-				}
-			}
-		} else if (locality.equalsIgnoreCase("Cloud")) {
-			System.out.println("Cloud Desktop Execution started");
-			DesiredCapabilities caps = DesiredCapabilities.chrome();
-			caps.setCapability("browserName", "chrome");
-			caps.setCapability("version", Integer.valueOf(60));
-			caps.setCapability("platform", "Vista");
-			caps.setCapability("username", "imetestcloud");
-			caps.setCapability("accesskey", "f56f6516-3056-4aac-8ff5-03e40719fe59");
-			this.remoteDriver = new RemoteWebDriver(new URL(url), (Capabilities) caps);
-			this.remoteDriver.manage().window().maximize();
-		}
-		return this.remoteDriver;
-	}
+
 
 	public String getPort() throws Exception {
 		ServerSocket socket = new ServerSocket(0);
@@ -656,15 +567,6 @@ public class PageBase {
 		return port;
 	}
 
-	public void checkVideoPlaying(String videoPlayerPath) throws Exception {
-		Thread.sleep(1000L);
-		takeScreenshotVideo("Image1", videoPlayerPath);
-		Thread.sleep(3000L);
-		takeScreenshotVideo("Image2", videoPlayerPath);
-		String file1 = "VideoComparison\\Image1.png";
-		String file2 = "VideoComparison\\Image2.png";
-		processImage(file1, file2);
-	}
 
 	public void takeScreenshotVideo(String screenshotName, String videoPlayerPath) {
 		try {

@@ -318,9 +318,6 @@ public class TestBase {
         PageBase pagebaseclass = new PageBase(this.appiumDriver);
         this.appiumDriver = pagebaseclass.launchApp(this.udid, localityType, RemoteUrl, toolname, appType, port, 
             platform_name, startURL);
-      } else if (this.toolName.equalsIgnoreCase("selenium")) {
-        PageBase pagebaseclass = new PageBase(this.remoteDriver);
-        this.remoteDriver = pagebaseclass.launchSite(browser, localityType, RemoteUrl);
       } 
     } catch (Exception e) {
       System.out.println(e.getMessage());
