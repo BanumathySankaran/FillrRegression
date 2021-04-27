@@ -73,14 +73,9 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.Platform;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -99,7 +94,7 @@ public class PageBase {
 	public RemoteWebDriver remoteDriver;
 
 	@SuppressWarnings("rawtypes")
-	public static AppiumDriver appiumDriver;
+	protected static AppiumDriver appiumDriver;
 
 	protected String toolName;
 
@@ -290,7 +285,7 @@ public class PageBase {
 
 	public String accesskey;
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public AppiumDriver<WebElement> launchApp(String udid, String locality, String url, String toolname, String appType,
 			String port, String platformName, String startURL) throws Exception {
 		platform_Name = platformName;
@@ -608,7 +603,7 @@ public class PageBase {
 		return size;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void waitForVisibilityOfElement(String xpath) throws Exception {
 		try {
 			WebDriverWait wait;
@@ -625,7 +620,7 @@ public class PageBase {
 				if (!str.equals("Appium"))
 					break;
 				wait = new WebDriverWait((WebDriver) PageBase.appiumDriver, 90L, 500L);
-				wait.until((Function) ExpectedConditions.elementToBeClickable(this.appiumDriver.findElement(By.xpath(xpath))));
+				wait.until((Function) ExpectedConditions.elementToBeClickable(appiumDriver.findElement(By.xpath(xpath))));
 				break;
 			}
 		} catch (Exception exc) {
@@ -703,6 +698,7 @@ public class PageBase {
 				.getAbsolutePath();
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void saveImage(String screenshotName, String videoPlayerPath) throws Exception {
 		WebDriverWait waitSelenium = new WebDriverWait((WebDriver) this.remoteDriver, 120L, 250L);
 		waitSelenium.until((Function) ExpectedConditions.visibilityOf(this.remoteDriver.findElement(By.xpath(videoPlayerPath))));
@@ -890,6 +886,7 @@ public class PageBase {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void click(WebElement e, String elementName) throws Exception {
 		try {
 			WebDriverWait wait, waitSelenium;
@@ -904,7 +901,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 100L, 500L);
+				wait = new WebDriverWait((WebDriver) appiumDriver, 100L, 500L);
 				wait.until((Function) ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(e)));
 				break;
 			}
@@ -936,7 +933,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
+				wait = new WebDriverWait((WebDriver) appiumDriver, 60L, 500L);
 				wait.until((Function) ExpectedConditions
 						.elementToBeClickable(PageBase.appiumDriver.findElement(By.cssSelector(ladderScreen))));
 				break;
@@ -1076,7 +1073,7 @@ public class PageBase {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<WebElement> getList_ByClassName(WebElement element, String byValue) {
 		try {
 			WebDriverWait wait;
@@ -1175,7 +1172,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				url = this.appiumDriver.getCurrentUrl();
+				url = appiumDriver.getCurrentUrl();
 				break;
 			}
 		} catch (Exception exc) {
@@ -1253,6 +1250,7 @@ public class PageBase {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void clickWithoutWait(WebElement e, String elementName) throws Exception {
 		try {
 			WebDriverWait wait;
@@ -1265,7 +1263,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
+				wait = new WebDriverWait((WebDriver) appiumDriver, 60L, 500L);
 				wait.until((Function) ExpectedConditions.visibilityOf(e));
 				break;
 			}
@@ -1385,6 +1383,7 @@ public class PageBase {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void click(String xpath, String elementName) throws Exception {
 		try {
 			WebDriverWait wait, waitSelenium;
@@ -1400,9 +1399,9 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
+				wait = new WebDriverWait((WebDriver) appiumDriver, 60L, 500L);
 				wait.until((Function) ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
-				this.appiumDriver.findElementByXPath(xpath).click();
+				appiumDriver.findElementByXPath(xpath).click();
 				break;
 			}
 			ExtentUtility.getTest().log(LogStatus.PASS, "Click on Element " + elementName + " successful",
@@ -1562,6 +1561,7 @@ public class PageBase {
 		return pageTitle;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String getText(WebElement e, String elementName) throws Exception {
 		WebDriverWait wait, waitSelenium;
 		String str1;
@@ -1575,7 +1575,7 @@ public class PageBase {
 		case 1967770400:
 			if (!str1.equals("Appium"))
 				break;
-			wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
+			wait = new WebDriverWait((WebDriver)appiumDriver, 60L, 500L);
 			wait.until((Function) ExpectedConditions.visibilityOf(e));
 			break;
 		}
@@ -1656,6 +1656,7 @@ public class PageBase {
 		return text;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String getAttributeValue(WebElement e, String attribute) throws Exception {
 		WebDriverWait wait, waitSelenium;
 		String str1;
@@ -1750,6 +1751,7 @@ public class PageBase {
 		return jsonString.toString();
 	}
 
+	@SuppressWarnings("resource")
 	public StringBuffer getServiceResponse(String serviceUrl) throws Exception {
 		String output = null;
 		StringBuffer outputResponse = null;
@@ -1877,7 +1879,7 @@ public class PageBase {
 				if (!str.equals("Appium"))
 					break;
 				Thread.sleep(5000L);
-				this.appiumDriver.switchTo().frame(frameId);
+				appiumDriver.switchTo().frame(frameId);
 				break;
 			}
 		} catch (NoSuchWindowException exc) {

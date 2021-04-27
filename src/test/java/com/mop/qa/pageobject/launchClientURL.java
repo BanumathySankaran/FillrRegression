@@ -1,6 +1,9 @@
 package com.mop.qa.pageobject;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import com.mop.qa.test.testBase1.*;
 import io.appium.java_client.AppiumDriver;
@@ -22,7 +25,9 @@ public class launchClientURL extends PageBase {
 	String goKeyAndroid = "//*[@contentDescription='Go']";
 	String openTabAndr = "//*[@id='arrow']";
  private static final String macysURL = "https://www.macys.com";
- String macysLogo = null;
+ 	String macysLogo = null;
+ 	String tabsOpen = "//*[@id='arrow']";
+ 	String closeBtnAndr = "//*[@id='deleteButton']";
 
 
 	
@@ -57,6 +62,19 @@ public class launchClientURL extends PageBase {
 		this.assertTrue(isElementDisplayed(10, macysLogo, "MacysLogo"),"Macys logo is visible");
 		this.softWait(10);
 		System.out.println("Macys logo is visible");
-		//appiumDriver.quit();
+		closeTabs();
 	}
+	
+	
+	public void closeTabs() throws Exception {
+		if(isElementDisplayed(5, tabsOpen, "any open tabs seen: ")) {
+			@SuppressWarnings("unchecked")
+			List<WebElement> closeButtons = appiumDriver.findElements(By.xpath(closeBtnAndr));
+			for(WebElement ele:closeButtons) {
+				this.click(ele,"Close tabs that are open");
+				this.softWait(7);
+			}
+	}
+	}
+	
 	}
