@@ -536,8 +536,9 @@ public class PageBase {
 					capabilities.setCapability("deviceQuery", "@serialNumber='" + udid + "'");
 				}
 				if (this.installApp == "Y")
-					capabilities.setCapability("app", this.appName);
+					//capabilities.setCapability("app", this.appName);
 				capabilities.setCapability("bundleId", bundleID);
+				capabilities.setCapability("automationName", "XCUITest");
 				capabilities.setCapability("noReset", true);
 				capabilities.setCapability("accessKey", accessKey);
 				capabilities.setCapability("instrumentApp", false);
@@ -5413,5 +5414,17 @@ public void scrollUpMethod2(String elementToBeDisplayed) throws Exception {
 
 		}
 	
+	
+	public void typeInField(String xpath, String value){
+	    String val = value; 
+	    WebElement element = appiumDriver.findElement(By.xpath(xpath));
+	    element.clear();
+
+	    for (int i = 0; i < val.length(); i++){
+	        char c = val.charAt(i);
+	        String s = new StringBuilder().append(c).toString();
+	        element.sendKeys(s);
+	    }       
+	}
 	
 	}
