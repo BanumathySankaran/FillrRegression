@@ -523,6 +523,9 @@ public class PageBase {
 				capabilities.setCapability("autoGrantPermissions", true);
 				capabilities.setCapability("unicodeKeyboard", true);
 				capabilities.setCapability("resetKeyboard", true);
+				capabilities.setCapability("connectHardwareKeyboard", false);
+				//capabilities.setCapability("captureKeyBoardInput", true);
+				//capabilities.setCapability("resetKeyboard", true);
 				capabilities.setCapability("testName", getAppProperties("projectName"));
 				PageBase.appiumDriver = (AppiumDriver<WebElement>) new AndroidDriver<WebElement>(new URL(url),
 						(Capabilities) capabilities);
@@ -536,9 +539,8 @@ public class PageBase {
 					capabilities.setCapability("deviceQuery", "@serialNumber='" + udid + "'");
 				}
 				if (this.installApp == "Y")
-					//capabilities.setCapability("app", this.appName);
+				capabilities.setCapability("app", this.appName);
 				capabilities.setCapability("bundleId", bundleID);
-				capabilities.setCapability("automationName", "XCUITest");
 				capabilities.setCapability("noReset", true);
 				capabilities.setCapability("accessKey", accessKey);
 				capabilities.setCapability("instrumentApp", false);
@@ -5425,6 +5427,58 @@ public void scrollUpMethod2(String elementToBeDisplayed) throws Exception {
 	        String s = new StringBuilder().append(c).toString();
 	        element.sendKeys(s);
 	    }       
+	}
+	
+	public void cartDetectorCheck(String cartDetector,String okBtn) throws Exception {
+		if(isElementDisplayed(3, cartDetector, "Cart Detected")) {
+			this.clickWithoutWait(okBtn, "OK");
+		}
+	}
+	
+	public void formValCapturedCheck(String formValCap,String okBtn) throws Exception {
+		if(isElementDisplayed(3, formValCap, "Form Values Captured")) {
+			this.clickWithoutWait(okBtn, "OK");	
+		}
+	}
+	
+	public void reloadPgIfBtnNotDisp(String eleXpth,String urlBar,String goKey) throws Exception{
+			if(!isElementDisplayed(9, eleXpth, "checkout button")) {
+				this.click(urlBar, "click On searchBar");
+				this.clickWithWait(goKey, "click on go button Android Key Board",6);
+	}
+		}
+	
+	public void scrollDownOrUpatTheBottomScreen(int coor,String direction) throws Exception {
+		PointOption p1 = new PointOption();
+		PointOption p2 = new PointOption();
+		int counter = 0;
+		int topY = 0;
+		for (int i = 0; i <= 10; i++) {
+ {
+				TouchAction action = new TouchAction((PerformsTouchActions) appiumDriver);
+				int pressX = appiumDriver.manage().window().getSize().width / 2;
+				int bottomY = appiumDriver.manage().window().getSize().height * 3 / 4;
+				topY = bottomY - coor;
+				System.out.println("pressX : " + pressX);
+				System.out.println("bottomY : " + bottomY);
+				System.out.println("topY : " + topY);
+				if(direction.equalsIgnoreCase("Down")) {
+				action.press(new PointOption().withCoordinates(pressX, bottomY))
+						.waitAction(new WaitOptions().withDuration(Duration.ofMillis(2000)))
+						.moveTo(new PointOption().withCoordinates(pressX, topY)).release().perform();
+				
+				}else if(direction.equalsIgnoreCase("Up")) {
+					action.press(new PointOption().withCoordinates(pressX, topY))
+					.waitAction(new WaitOptions().withDuration(Duration.ofMillis(2000)))
+					.moveTo(new PointOption().withCoordinates(pressX, bottomY)).release().perform();
+				}
+				counter++;
+			}
+			if (counter > 23) {
+				System.out.println("The limit of swiping has exceeded, element is not found.");
+				break;
+			}
+		}
 	}
 	
 	}
