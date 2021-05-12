@@ -44,7 +44,7 @@ public class wallmartHome extends PageBase {
 			urlSearchBar = "//*[@class='UIAView' and ./*[@id='Address Bar']]";
 			goKey = "//*[@text='go']";
 			okBtn = "//*[@text='Dismiss']";
-			prod = "(//*[@class='UIAView' and @width>0 and ./*[@id]])[23]/child::*";
+			prod = "(//*[@class='UIAView' and @width>0 and ./*[@id]])[24]/child::*";
 			prodQntity = "//*[@text='Quantity']";
 			addToCart = "//*[@text='Add to cart' and ./parent::*[(./preceding-sibling::* | ./following-sibling::*)[@class='UIAView']]]";
 		}
@@ -75,10 +75,7 @@ public class wallmartHome extends PageBase {
 		this.clickWithWait(menu, "Walmart Menu", 5);
 		this.swipeDownForNTimes(2);
 		this.waitFor(2);
-		if(!isElementDisplayed(6, prodCateg1, "Element")) {
-			this.click(urlSearchBar, "click On searchBar");
-			this.click(goKey, "click on go button Android Key Board");
-		}
+		this.reloadPgIfBtnNotDisp(prodCateg1, urlSearchBar, goKey);
 		this.clickWithWait(prodCateg1, "Random category once", 7);
 		this.clickWithWait(prodCateg2, "random sub category", 7);
 		this.swipeDownForNTimes(1);
@@ -100,16 +97,20 @@ public class wallmartHome extends PageBase {
 			this.waitFor(5);
 			logger.info("check if the button is displayed if not reload the page: ");
 			reloadPgIfBtnNotDisp(addToCart,urlSearchBar,goKey);
-			WebElement ele = appiumDriver.findElement(By.xpath(addToCart));
+			WebElement ele = findElementByXpath(addToCart, "add to cart button");
+			this.softWait(5);
 			ele.click();
 			logger.info("item added to cart");
 			cartDetectorCheck(cartDetector, okBtn);
 			formValCapturedCheck(formValCap, okBtn);
-			this.scrollUpNnoOfTimes(2);
+			this.scrollUpNnoOfTimes(1);
 			this.waitFor(13);
+			if(platform_Name.equalsIgnoreCase("iOS")) {
+			cartDetectorCheck(cartDetector, okBtn);
+			}
 			this.assertTrue(isElementDisplayed(5, kart, "cart"), "cart is present");
 			logger.info("click on cart now");
-			this.clickWithWait(kart, "click on  cart", 5);
+			this.clickWithWait(kart, "click on  cart", 7);
 			this.waitFor(3);
 		} catch (Exception e) {
 
@@ -120,6 +121,9 @@ public class wallmartHome extends PageBase {
 		this.clickWithWait(kart, "click on  cart", 5);
 		this.reloadPgIfBtnNotDisp(remBtn,urlSearchBar,goKey);
 		cartDetectorCheck(cartDetector, okBtn);
+		if(platform_Name.equalsIgnoreCase("iOS")) {
+			this.swipeDownForNTimes(1);
+		}
 		if (isElementDisplayed(6, remBtn, "Check if remove is present")) {
 			this.clickWithWait(remBtn, "Remove Button", 10);
 			this.scrollUpNnoOfTimes(1);

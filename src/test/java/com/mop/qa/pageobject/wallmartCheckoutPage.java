@@ -68,6 +68,7 @@ public class wallmartCheckoutPage extends PageBase {
 			zipCodeVal = "//*[@id='zipcode']";
 			credCardNum = "//*[@id='Card number*' and @class='UIATextField']";
 			ccValue = "//*[@placeholder=' ']";
+
 		}
 
 		else if (platform_Name.equalsIgnoreCase("Android")) {
@@ -95,35 +96,34 @@ public class wallmartCheckoutPage extends PageBase {
 	public void cartPageValidate() throws Exception {
 		cartDetectorCheck(cartDetector, okBtn);
 		this.waitFor(4);
-		if(!isElementDisplayed(6, checkOut, "checkout button")) {
-			this.click(urlSearchBar, "click On searchBar");
-			this.click(goKey, "click on go button Android Key Board");
-		WebElement checkOutBtn = appiumDriver.findElement(By.xpath(checkOut));
-		checkOutBtn.click();
-		logger.info("The checkout button is selected");
-		}
-		else {
-		try {
-			this.clickWithWait(checkOut, "checkout page",5);
-		} catch (Exception e) {
-			this.clickWithWait(checkOut, "checkout page",5);
-		}
+		if (!isElementDisplayed(6, checkOut, "checkout button")) {
+			reloadPgIfBtnNotDisp(checkOut, urlSearchBar, goKey);
+			WebElement checkOutBtn = findElementByXpath(checkOut, "Check out button");
+			this.softWait(5);
+			checkOutBtn.click();
+			logger.info("The checkout button is selected");
+		} else {
+			try {
+				this.clickWithWait(checkOut, "checkout page", 5);
+			} catch (Exception e) {
+				this.clickWithWait(checkOut, "checkout page", 5);
+			}
 		}
 		formValCapturedCheck(formValCap, okBtn);
-		if(isElementDisplayed(5, editBtn, "edit button")) {
+		if (isElementDisplayed(5, editBtn, "edit button")) {
 			this.clickWithWait(editBtn, "edit the Address of customer", 10);
+		} else if (isElementDisplayed(6, signInEmail, "email field display check")) {
+			this.softWait(10);
+			String textFromEmail = getText(signInEmail);
+			this.assertTrue(!textFromEmail.isEmpty(), "email Field not empty");
+			this.clickWithoutWait(show, "show password");
+			String txtFromPasswd = getText(passWdField);
+			this.assertTrue(!txtFromPasswd.isEmpty(), "password Field not empty");
+			this.click(goKey, "click on go button: ");
+			if (isElementDisplayed(5, contWithoutAcc, "Continue without account")) {
+				this.clickWithoutWait(contWithoutAcc, "Continue without account");
 			}
-		else if(isElementDisplayed(6, signInEmail, "email field display check")) {		
-		String textFromEmail = getText(signInEmail);
-		this.assertTrue(!textFromEmail.isEmpty(), "email Field not empty");
-		this.clickWithoutWait(show, "show password");
-		String txtFromPasswd = getText(passWdField);
-		this.assertTrue(!txtFromPasswd.isEmpty(), "password Field not empty");
-		this.click(goKey, "click on go button: ");
-		if (isElementDisplayed(5, contWithoutAcc, "Continue without account")) {
-			this.clickWithoutWait(contWithoutAcc, "Continue without account");
 		}
-			}
 	}
 
 	public void guestDetailsAndPaymentPageValidations() throws Exception {
@@ -138,58 +138,60 @@ public class wallmartCheckoutPage extends PageBase {
 	public void validateCusAddress() throws Exception {
 		cartDetectorCheck(cartDetector, okBtn);
 		this.waitFor(15);
-		if(isElementDisplayed(5, editDelAddress, "edit button")) {
-		this.clickWithWait(editDelAddress, "edit the Address of customer", 10);
-		}else if(isElementDisplayed(5, editBtn, "edit button")) {
-			this.clickWithWait(editBtn, "edit the Address of customer", 10);	
+		if (isElementDisplayed(5, editDelAddress, "edit button")) {
+			this.clickWithWait(editDelAddress, "edit the Address of customer", 10);
+		} else if (isElementDisplayed(5, editBtn, "edit button")) {
+			this.clickWithWait(editBtn, "edit the Address of customer", 10);
 		}
 		verify_addressDetails();
 		this.swipeDownForNTimes(1);
-		if(platform_Name.equalsIgnoreCase("iOS")) {
-		String contToPaymnt = "//*[@text='Continue to Payment Options']";
-		this.clickWithoutWait(contToPaymnt, "Continue to payment");
-		cartDetectorCheck(cartDetector, okBtn);
-		this.clickWithoutWait(continueBtn, "Continue to payment again");
+		if (platform_Name.equalsIgnoreCase("iOS")) {
+			String contToPaymnt = "//*[@text='Continue to Payment Options']";
+			this.clickWithoutWait(contToPaymnt, "Continue to payment");
+			cartDetectorCheck(cartDetector, okBtn);
+			if (isElementDisplayed(5, continueBtn, "continue to payment button")) {
+				this.clickWithoutWait(continueBtn, "Continue to payment again");
+			}
 		}
-		
+
 		else {
-		this.clickWithWait(useThisAddress, "Use this address", 8);
-		if(isElementDisplayed(5, createAcc, "Create Acc")) {
-			this.clickWithWait(createAcc, "create account", 8);
-		}
-		formValCapturedCheck(formValCap, okBtn);
-		if (isElementDisplayed(5, contWithoutAcc, "Continue without account")) {
-			this.clickWithoutWait(contWithoutAcc, "Continue without account");
-		}
-		// this.clickWithWait(contThisAdd, "Continue with this address", 8);
-		verify_addressDetails();
-		this.swipeDownForNTimes(2);
-		this.clickWithWait(continueBtn, "Continue", 7);
-		logger.info("All the Address fields are validated");
+			this.clickWithWait(useThisAddress, "Use this address", 8);
+			if (isElementDisplayed(5, createAcc, "Create Acc")) {
+				this.clickWithWait(createAcc, "create account", 8);
+			}
+			formValCapturedCheck(formValCap, okBtn);
+			if (isElementDisplayed(5, contWithoutAcc, "Continue without account")) {
+				this.clickWithoutWait(contWithoutAcc, "Continue without account");
+			}
+			// this.clickWithWait(contThisAdd, "Continue with this address", 8);
+			verify_addressDetails();
+			this.swipeDownForNTimes(2);
+			this.clickWithWait(continueBtn, "Continue", 7);
+			logger.info("All the Address fields are validated");
 		}
 	}
 
 	private void verify_addressDetails() throws Exception {
-		if(isElementDisplayed(5, cusFirstName, "Customer first name field")) {
-		String textFromFirstName = getText(cusFirstName);
-		this.assertTrue(!textFromFirstName.isEmpty(), "First Name Field not empty: " + textFromFirstName);
-		String textFromSecName = getText(cusLastName);
-		this.assertTrue(!textFromSecName.isEmpty(), "Last Name Field not empty: " + textFromSecName);
-		String textFromPhNo = getText(cusPhoneNo);
-		this.assertTrue(!textFromPhNo.isEmpty(), "Ph No Field not empty: " + textFromPhNo);
-		String addressFirstLine = getText(addFirstLine);
-		if(platform_Name.equalsIgnoreCase("iOS")) {
-			this.swipeDownForNTimes(1);
-		}
-		this.assertTrue(!addressFirstLine.isEmpty(), "Address First Line Field not empty: " + addressFirstLine);
-		String addressLastLine = getText(addSecLine);
-		this.assertTrue(!addressLastLine.isEmpty(), "Address second Field not empty: " + addressLastLine);
-		String textFromCity = getText(cityVal);
-		this.assertTrue(!textFromCity.isEmpty(), "City Name Field not empty: " + textFromCity);
-		String textFromState = getText(stateVal);
-		this.assertTrue(!textFromState.isEmpty(), "State Field not empty: " + textFromState);
-		String textFromZipCode = getText(zipCodeVal);
-		this.assertTrue(!textFromZipCode.isEmpty(), "postal code Field not empty: " + textFromZipCode);
+		if (isElementDisplayed(5, cusFirstName, "Customer first name field")) {
+			String textFromFirstName = getText(cusFirstName);
+			this.assertTrue(!textFromFirstName.isEmpty(), "First Name Field not empty: " + textFromFirstName);
+			String textFromSecName = getText(cusLastName);
+			this.assertTrue(!textFromSecName.isEmpty(), "Last Name Field not empty: " + textFromSecName);
+			String textFromPhNo = getText(cusPhoneNo);
+			this.assertTrue(!textFromPhNo.isEmpty(), "Ph No Field not empty: " + textFromPhNo);
+			String addressFirstLine = getText(addFirstLine);
+			if (platform_Name.equalsIgnoreCase("iOS")) {
+				this.swipeDownForNTimes(1);
+			}
+			this.assertTrue(!addressFirstLine.isEmpty(), "Address First Line Field not empty: " + addressFirstLine);
+			String addressLastLine = getText(addSecLine);
+			this.assertTrue(!addressLastLine.isEmpty(), "Address second Field not empty: " + addressLastLine);
+			String textFromCity = getText(cityVal);
+			this.assertTrue(!textFromCity.isEmpty(), "City Name Field not empty: " + textFromCity);
+			String textFromState = getText(stateVal);
+			this.assertTrue(!textFromState.isEmpty(), "State Field not empty: " + textFromState);
+			String textFromZipCode = getText(zipCodeVal);
+			this.assertTrue(!textFromZipCode.isEmpty(), "postal code Field not empty: " + textFromZipCode);
 		}
 	}
 
@@ -198,19 +200,19 @@ public class wallmartCheckoutPage extends PageBase {
 		this.waitFor(3);
 		String textFromFirstName = null;
 		String textFromSecName = null;
-		this.assertTrue(isElementSelected(creditCardOption, "Credit card"), "credit card option is selected");
-		if(platform_Name.equalsIgnoreCase("iOS")) {
-			String cusFirstNamePayment = "(((((//*[@text='Choose payment method']/*[@class='UIAView'])[6]/*[@class='UIAView'])[3]/*/*[@class='UIAView' and ./parent::*[@class='UIAView']])[2]/*[@class='UIAView'])[2]/*[@class='UIATextField'])[1]";
-			String LastNamePaymnt = "//*[@id='Last name on card*' and @class='UIATextField']";
+		this.assertTrue(isElementDisplayed(4, creditCardOption, "Credit card"), "credit card option is selected");
+		if (platform_Name.equalsIgnoreCase("iOS")) {
+			String cusFirstNamePayment = "(//*[@text='First name on card*']/parent::*/following-sibling::*)[1]";
+			String LastNamePaymnt = "(//*[@text='Last name on card*']/parent::*/following-sibling::*)[1]";
 			textFromFirstName = getText(cusFirstNamePayment);
 			this.assertTrue(!textFromFirstName.isEmpty(), "First Name Field not empty: " + textFromFirstName);
 			textFromSecName = getText(LastNamePaymnt);
 			this.assertTrue(!textFromSecName.isEmpty(), "Last Name Field not empty: " + textFromSecName);
-		}else {
-		textFromFirstName = getText(cusFirstName);
-		this.assertTrue(!textFromFirstName.isEmpty(), "First Name Field not empty: " + textFromFirstName);
-		textFromSecName = getText(cusLastName);
-		this.assertTrue(!textFromSecName.isEmpty(), "Last Name Field not empty: " + textFromSecName);
+		} else {
+			textFromFirstName = getText(cusFirstName);
+			this.assertTrue(!textFromFirstName.isEmpty(), "First Name Field not empty: " + textFromFirstName);
+			textFromSecName = getText(cusLastName);
+			this.assertTrue(!textFromSecName.isEmpty(), "Last Name Field not empty: " + textFromSecName);
 		}
 		String ccNumber = getText(credCardNum);
 		this.assertTrue(!ccNumber.isEmpty(), "CC Number Field not empty: " + ccNumber);
@@ -222,7 +224,5 @@ public class wallmartCheckoutPage extends PageBase {
 		this.assertTrue(!ccvNum.isEmpty(), "CCV No: Field not empty: " + ccvNum);
 		logger.info("All the CC fields are validated");
 	}
-
-	
 
 }

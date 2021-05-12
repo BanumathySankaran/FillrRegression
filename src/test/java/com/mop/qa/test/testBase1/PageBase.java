@@ -889,34 +889,19 @@ public class PageBase {
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void click(WebElement e, String elementName) throws Exception {
+	public void click(WebElement ele, String elementName) throws Exception {
 		try {
-			WebDriverWait wait, waitSelenium;
-			String str;
-			switch ((str = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str.equals("Selenium"))
-					break;
-				waitSelenium = new WebDriverWait((WebDriver) this.remoteDriver, 80L, 500L);
-				waitSelenium.until((Function) ExpectedConditions.elementToBeClickable(e));
-				break;
-			case 1967770400:
-				if (!str.equals("Appium"))
-					break;
-				wait = new WebDriverWait((WebDriver) appiumDriver, 100L, 500L);
-				wait.until((Function) ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(e)));
-				break;
-			}
-			e.click();
-			System.out.println("Clicked " + elementName);
-			Thread.sleep(1000L);
-		} catch (Exception exc) {
+			ele.click();
+			System.out.println("The element click works successfully");
+			
+		}catch (Exception exc) {
 			ExtentUtility.getTest().log(LogStatus.FAIL, String.valueOf(elementName) + " not found",
 					String.valueOf(exc.toString()) + ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
 			throw new Exception(String.valueOf(elementName) + " not found");
 		}
 	}
+
+
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void verifyelementpresence(String ladderScreen) throws Exception {
@@ -929,16 +914,14 @@ public class PageBase {
 				if (!str.equals("Selenium"))
 					break;
 				waitSelenium = new WebDriverWait((WebDriver) this.remoteDriver, 120L, 500L);
-				((WebElement) waitSelenium
-						.until((Function) ExpectedConditions.presenceOfElementLocated(By.cssSelector(ladderScreen))))
+				((WebElement) waitSelenium.until((Function) ExpectedConditions.presenceOfElementLocated(By.cssSelector(ladderScreen))))
 								.isDisplayed();
 				break;
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
 				wait = new WebDriverWait((WebDriver) appiumDriver, 60L, 500L);
-				wait.until((Function) ExpectedConditions
-						.elementToBeClickable(PageBase.appiumDriver.findElement(By.cssSelector(ladderScreen))));
+				wait.until((Function) ExpectedConditions.elementToBeClickable(PageBase.appiumDriver.findElement(By.cssSelector(ladderScreen))));
 				break;
 			}
 		} catch (Exception e) {
@@ -946,6 +929,7 @@ public class PageBase {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "static-access" })
 	public void clickByJse(WebElement e, String elementName) throws Exception {
 		try {
 			AppiumDriver<WebElement> appiumDriver;
@@ -973,33 +957,6 @@ public class PageBase {
 			ExtentUtility.getTest().log(LogStatus.FAIL, String.valueOf(elementName) + " not found",
 					String.valueOf(exc.toString()) + ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
 			throw new Exception(String.valueOf(elementName) + " not found");
-		}
-	}
-
-	public <T> void clickWithoutSS(WebElement e) throws Exception {
-		try {
-			WebDriverWait wait, waitSelenium;
-			String str;
-			switch ((str = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str.equals("Selenium"))
-					break;
-				waitSelenium = new WebDriverWait((WebDriver) this.remoteDriver, 60L, 250L);
-				waitSelenium.until((Function) ExpectedConditions.elementToBeClickable(e));
-				break;
-			case 1967770400:
-				if (!str.equals("Appium"))
-					break;
-				wait = new WebDriverWait((WebDriver) PageBase.appiumDriver, 60L, 500L);
-				wait.until((Function) ExpectedConditions.visibilityOf(e));
-				break;
-			}
-			e.click();
-		} catch (Exception exc) {
-			exc.printStackTrace();
-			ExtentUtility.getTest().log(LogStatus.FAIL, e + " not found",
-					String.valueOf(exc.toString()) + ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-			throw new Exception(e + " not found");
 		}
 	}
 
@@ -1046,35 +1003,7 @@ public class PageBase {
 		}
 	}
 
-	public void navigateToToC(String strToCLayer, String strToCItem) {
-		try {
-			WebElement testElement;
-			WebElement testElement1;
-			String str;
-			switch ((str = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str.equals("Selenium"))
-					break;
-				testElement = this.remoteDriver.findElement(By.cssSelector(
-						"div[id='tocItemContainer" + strToCLayer + "'] > div > div > div[title='" + strToCItem + "']"));
-				if (!testElement.isDisplayed())
-					scrollTo((WebDriver) this.remoteDriver, testElement);
-				testElement.click();
-				break;
-			case 1967770400:
-				if (!str.equals("Appium"))
-					break;
-				testElement1 = this.appiumDriver.findElement(By.cssSelector(
-						"div[id='tocItemContainer" + strToCLayer + "'] > div > div > div[title='" + strToCItem + "']"));
-				if (!testElement1.isDisplayed())
-					scrollTo((WebDriver) this.appiumDriver, testElement1);
-				testElement1.click();
-				break;
-			}
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
+	
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<WebElement> getList_ByClassName(WebElement element, String byValue) {
@@ -1298,7 +1227,7 @@ public class PageBase {
 				if (!str.equals("Appium"))
 					break;
 				wait = new WebDriverWait((WebDriver) PageBase.appiumDriver, 60L, 500L);
-				wait.until((Function) ExpectedConditions.visibilityOf(this.appiumDriver.findElementByXPath(xpath)));
+				wait.until((Function) ExpectedConditions.visibilityOf(appiumDriver.findElementByXPath(xpath)));
 				PageBase.appiumDriver.findElementByXPath(xpath).click();
 				break;
 			}
@@ -1318,8 +1247,9 @@ public class PageBase {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void clickWithWait(String xpath, String elementName, int seconds) throws Exception {
-		this.appiumDriver.manage().timeouts().implicitlyWait(50L, TimeUnit.SECONDS);
+		appiumDriver.manage().timeouts().implicitlyWait(50L, TimeUnit.SECONDS);
 		String screenShot = getAppProperties("screenShotRequiredForSuccess");
 		try {
 			WebDriverWait wait;
@@ -1334,10 +1264,10 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
+				wait = new WebDriverWait((WebDriver) appiumDriver, 60L, 500L);
 				Thread.sleep(1000L);
-				wait.until((Function) ExpectedConditions.visibilityOf(this.appiumDriver.findElementByXPath(xpath)));
-				this.appiumDriver.findElementByXPath(xpath).click();
+				wait.until((Function) ExpectedConditions.visibilityOf(appiumDriver.findElementByXPath(xpath)));
+				appiumDriver.findElementByXPath(xpath).click();
 				Thread.sleep(3000L);
 				break;
 			}
@@ -1357,40 +1287,13 @@ public class PageBase {
 		}
 	}
 
-	public void clickLinkTest(String xpath, String elementName) throws Exception {
-		try {
-			WebDriverWait wait, waitSelenium;
-			String str;
-			switch ((str = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str.equals("Selenium"))
-					break;
-				waitSelenium = new WebDriverWait((WebDriver) this.remoteDriver, 60L, 500L);
-				waitSelenium.until((Function) ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
-				this.remoteDriver.findElementByLinkText(xpath).click();
-				break;
-			case 1967770400:
-				if (!str.equals("Appium"))
-					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
-				wait.until((Function) ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
-				appiumDriver.findElementByXPath(xpath).click();
-				break;
-			}
-			ExtentUtility.getTest().log(LogStatus.PASS, "Click on Element " + elementName + " successful",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		} catch (Exception exc) {
-			ExtentUtility.getTest().log(LogStatus.FAIL, exc + "Exception on clicking webelement",
-					String.valueOf(exc.toString()) + ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-			throw new Exception(exc);
-		}
-	}
-
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void click(String xpath, String elementName) throws Exception {
 		try {
-			WebDriverWait wait, waitSelenium;
+			WebDriverWait waitSelenium;
 			String str;
+			WebDriverWait wait;
 			switch ((str = this.toolName).hashCode()) {
 			case 1256533886:
 				if (!str.equals("Selenium"))
@@ -1441,6 +1344,7 @@ public class PageBase {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void clickbyClassName(String className, String elementName) throws Exception {
 		try {
 			WebDriverWait wait;
@@ -1541,7 +1445,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				action = new Actions((WebDriver) this.appiumDriver);
+				action = new Actions((WebDriver) appiumDriver);
 				action.dragAndDrop(e1, e2).perform();
 				break;
 			}
@@ -1559,7 +1463,7 @@ public class PageBase {
 			pageTitle = this.remoteDriver.getTitle();
 		} else {
 			Thread.sleep(5000L);
-			pageTitle = this.appiumDriver.getTitle();
+			pageTitle = appiumDriver.getTitle();
 		}
 		return pageTitle;
 	}
@@ -1588,7 +1492,7 @@ public class PageBase {
 		return text;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String getValue(WebElement e, String elementName) throws Exception {
 		WebDriverWait wait, waitSelenium;
 		String str1;
@@ -1625,7 +1529,7 @@ public class PageBase {
 		case 1967770400:
 			if (!str1.equals("Appium"))
 				break;
-			wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
+			wait = new WebDriverWait((WebDriver) appiumDriver, 60L, 500L);
 			wait.until((Function) ExpectedConditions.visibilityOf(e));
 			break;
 		}
@@ -1651,9 +1555,9 @@ public class PageBase {
 		case 1967770400:
 			if (!str1.equals("Appium"))
 				break;
-			wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
-			wait.until((Function) ExpectedConditions.visibilityOf(this.appiumDriver.findElementByXPath(xpath)));
-			text = this.appiumDriver.findElementByXPath(xpath).getText();
+			wait = new WebDriverWait((WebDriver) appiumDriver, 60L, 500L);
+			wait.until((Function) ExpectedConditions.visibilityOf(appiumDriver.findElementByXPath(xpath)));
+			text = appiumDriver.findElementByXPath(xpath).getText();
 			break;
 		}
 		return text;
@@ -1673,7 +1577,7 @@ public class PageBase {
 		case 1967770400:
 			if (!str1.equals("Appium"))
 				break;
-			wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
+			wait = new WebDriverWait((WebDriver) appiumDriver, 60L, 500L);
 			wait.until((Function) ExpectedConditions.visibilityOf(e));
 			break;
 		}
@@ -1703,7 +1607,6 @@ public class PageBase {
 
 	public void switchToCurrentWindowTitle() throws InterruptedException {
 		try {
-			int size;
 			String str;
 			switch ((str = this.toolName).hashCode()) {
 			case 1256533886:
@@ -1718,9 +1621,8 @@ public class PageBase {
 				if (!str.equals("Appium"))
 					break;
 				Thread.sleep(10000L);
-				size = this.appiumDriver.getWindowHandles().size();
-				for (String winHandle : this.appiumDriver.getWindowHandles())
-					this.appiumDriver.switchTo().window(winHandle);
+				for (String winHandle : appiumDriver.getWindowHandles())
+					appiumDriver.switchTo().window(winHandle);
 				break;
 			}
 		} catch (NoSuchWindowException exc) {
@@ -1728,66 +1630,10 @@ public class PageBase {
 		}
 	}
 
-	public String sendPostRequest(String apiName, String cookie, String payload) {
-		StringBuffer jsonString = new StringBuffer();
-		try {
-			URL url = new URL(
-					"https://disneydev7.service-now.com/api/x_wadm_wdpr_cast_c/v1/wdpr_cp_svc_castchoir/" + apiName);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setDoInput(true);
-			connection.setDoOutput(true);
-			connection.setRequestMethod("POST");
-			connection.setRequestProperty("Content-Type", "application/json");
-			connection.setRequestProperty("Cookie", cookie);
-			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), "UTF-8");
-			writer.write(payload);
-			writer.close();
-			BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String line;
-			while ((line = br.readLine()) != null)
-				jsonString.append(line);
-			br.close();
-			connection.disconnect();
-		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage());
-		}
-		return jsonString.toString();
-	}
-
-	@SuppressWarnings("resource")
-	public StringBuffer getServiceResponse(String serviceUrl) throws Exception {
-		String output = null;
-		StringBuffer outputResponse = null;
-		try {
-			Thread.sleep(5000L);
-			URL url = new URL(serviceUrl);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Content-Type", "application/json");
-			conn.setRequestProperty("source-appl-id", "6");
-			conn.setRequestProperty("Cache-Control", "no-cache");
-			conn.setRequestProperty("Accept-Resolution", "thumb, medium, high");
-			if (conn.getResponseCode() != 200)
-				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
-			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			System.out.println("Response from Server .... \n");
-			PrintWriter out = new PrintWriter("Response/response.txt");
-			while ((output = br.readLine()) != null) {
-				System.out.println(output);
-				output.contains("mediaThumb");
-				output.contains("width");
-				output.contains("height");
-				out.println(output);
-			}
-			conn.disconnect();
-		} catch (Exception exception) {
-		}
-		return outputResponse;
-	}
+	
 
 	public void switchToWindowTitle() throws Exception {
 		try {
-			int size;
 			String str;
 			switch ((str = this.toolName).hashCode()) {
 			case 1256533886:
@@ -1801,10 +1647,9 @@ public class PageBase {
 				if (!str.equals("Appium"))
 					break;
 				Thread.sleep(10000L);
-				size = this.appiumDriver.getWindowHandles().size();
-				this.ParentWinhadleMob = this.appiumDriver.getWindowHandle();
-				for (String winHandle : this.appiumDriver.getWindowHandles())
-					this.appiumDriver.switchTo().window(winHandle);
+				this.ParentWinhadleMob = appiumDriver.getWindowHandle();
+				for (String winHandle :appiumDriver.getWindowHandles())
+					appiumDriver.switchTo().window(winHandle);
 				break;
 			}
 		} catch (NoSuchWindowException exc) {
@@ -1826,8 +1671,8 @@ public class PageBase {
 				if (!str.equals("Appium"))
 					break;
 				Thread.sleep(10000L);
-				this.appiumDriver.close();
-				this.appiumDriver.switchTo().window(this.ParentWinhadleMob);
+				appiumDriver.close();
+				appiumDriver.switchTo().window(this.ParentWinhadleMob);
 				break;
 			}
 		} catch (NoSuchWindowException exc) {
@@ -1861,7 +1706,7 @@ public class PageBase {
 				if (!str.equals("Appium"))
 					break;
 				Thread.sleep(5000L);
-				this.appiumDriver.switchTo().frame(frameId);
+				appiumDriver.switchTo().frame(frameId);
 				break;
 			}
 		} catch (NoSuchWindowException exc) {
@@ -1903,7 +1748,7 @@ public class PageBase {
 				if (!str.equals("Appium"))
 					break;
 				Thread.sleep(5000L);
-				this.appiumDriver.switchTo().parentFrame();
+				appiumDriver.switchTo().parentFrame();
 				break;
 			}
 		} catch (NoSuchWindowException exc) {
@@ -1914,7 +1759,7 @@ public class PageBase {
 	public String getParentWindow() throws Exception {
 		String parentWindow = null;
 		if (this.toolName.equalsIgnoreCase("Appium")) {
-			parentWindow = this.appiumDriver.getWindowHandle();
+			parentWindow = appiumDriver.getWindowHandle();
 		} else if (this.toolName.equalsIgnoreCase("Selenium")) {
 			parentWindow = this.remoteDriver.getWindowHandle();
 		}
@@ -1923,8 +1768,8 @@ public class PageBase {
 
 	public void switchToParentWindow(String parentWindow) throws Exception {
 		if (this.toolName.equalsIgnoreCase("Appium")) {
-			this.appiumDriver.close();
-			this.appiumDriver.switchTo().window(parentWindow);
+			appiumDriver.close();
+			appiumDriver.switchTo().window(parentWindow);
 		} else if (this.toolName.equalsIgnoreCase("Selenium")) {
 			this.remoteDriver.close();
 			this.remoteDriver.switchTo().window(parentWindow);
@@ -1950,9 +1795,9 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
-				wait.until((Function) ExpectedConditions.visibilityOf(this.appiumDriver.findElementByXPath(xpath)));
-				we = this.appiumDriver.findElementByXPath(xpath);
+				wait = new WebDriverWait((WebDriver) appiumDriver, 60L, 500L);
+				wait.until((Function) ExpectedConditions.visibilityOf(appiumDriver.findElementByXPath(xpath)));
+				we = appiumDriver.findElementByXPath(xpath);
 				return we;
 			}
 		} catch (Exception exception) {
@@ -1971,9 +1816,9 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
-				wait.until((Function) ExpectedConditions.visibilityOf(this.appiumDriver.findElementByXPath(xpath)));
-				elements = this.appiumDriver.findElementsByXPath(xpath);
+				wait = new WebDriverWait((WebDriver) appiumDriver, 60L, 500L);
+				wait.until((Function) ExpectedConditions.visibilityOf(appiumDriver.findElementByXPath(xpath)));
+				elements = appiumDriver.findElementsByXPath(xpath);
 				return elements;
 			}
 		} catch (Exception exception) {
@@ -1996,7 +1841,7 @@ public class PageBase {
 		case 1967770400:
 			if (!str.equals("Appium"))
 				break;
-			wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
+			wait = new WebDriverWait((WebDriver) appiumDriver, 60L, 500L);
 			wait.until((Function) ExpectedConditions.visibilityOf(e));
 			break;
 		}
@@ -2010,26 +1855,12 @@ public class PageBase {
 		return false;
 	}
 
-	public void enterText(WebElement element, String cred, String elementName) throws Exception {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void enterText(WebElement element, String elementName) throws Exception {
 		try {
-			WebDriverWait wait, waitSelenium;
-			String str;
-			switch ((str = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str.equals("Selenium"))
-					break;
-				waitSelenium = new WebDriverWait((WebDriver) this.remoteDriver, 60L, 500L);
-				waitSelenium.until((Function) ExpectedConditions.visibilityOf(element));
-				break;
-			case 1967770400:
-				if (!str.equals("Appium"))
-					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
-				wait.until((Function) ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(element)));
-				break;
-			}
+			implicitWaitForWebElmnt(element);
 			element.clear();
-			element.sendKeys(new CharSequence[] { cred });
+			element.sendKeys();
 			ExtentUtility.getTest().log(LogStatus.PASS, " Enter text in " + elementName + " successful",
 					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
 		} catch (Exception exc) {
@@ -2037,6 +1868,13 @@ public class PageBase {
 					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
 			throw new Exception(exc + " Exception on Verified webelement");
 		}
+	}
+
+	private void implicitWaitForWebElmnt(WebElement element) {
+		WebDriverWait wait;
+
+			wait = new WebDriverWait((WebDriver) appiumDriver, 60L, 500L);
+			wait.until((Function) ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(element)));
 	}
 
 	public void assertTrue(String message) throws Exception {
@@ -2070,7 +1908,7 @@ public class PageBase {
 				if (!str.equals("Appium"))
 					break;
 				System.out.println("Navigate to" + subMenu + "menu.");
-				this.appiumDriver.findElement(By.cssSelector("div[title='" + subMenu + "']")).click();
+				appiumDriver.findElement(By.cssSelector("div[title='" + subMenu + "']")).click();
 				System.out.println("Navigated to sub-menu '" + subMenu + "'");
 				break;
 			}
@@ -2111,7 +1949,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				this.appiumDriver.manage().deleteAllCookies();
+				appiumDriver.manage().deleteAllCookies();
 				break;
 			}
 		} catch (Exception exc) {
@@ -2121,6 +1959,7 @@ public class PageBase {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public boolean elementIsDisplayed(WebElement e, String ElementName) throws Exception {
 		try {
 			WebDriverWait wait;
@@ -2136,7 +1975,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
+				wait = new WebDriverWait((WebDriver) appiumDriver, 60L, 500L);
 				wait.until((Function) ExpectedConditions.visibilityOf(e));
 				break;
 			}
@@ -2145,7 +1984,7 @@ public class PageBase {
 			return false;
 		}
 	}
-
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void isDisplayed(WebElement e, String ElementName) throws Exception {
 		try {
 			WebDriverWait wait, waitSelenium;
@@ -2160,7 +1999,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 30L, 500L);
+				wait = new WebDriverWait((WebDriver) appiumDriver, 30L, 500L);
 				wait.until((Function) ExpectedConditions.visibilityOf(e));
 				break;
 			}
@@ -2173,6 +2012,7 @@ public class PageBase {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public boolean elementIsDisplayed(WebElement e) throws Exception {
 		try {
 			WebDriverWait wait;
@@ -2188,7 +2028,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 5L, 50L);
+				wait = new WebDriverWait((WebDriver) appiumDriver, 5L, 50L);
 				wait.until((Function) ExpectedConditions.visibilityOf(e));
 				break;
 			}
@@ -2198,6 +2038,7 @@ public class PageBase {
 		return true;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public boolean elementIsEnabled(WebElement e) throws Exception {
 		try {
 			WebDriverWait wait;
@@ -2213,7 +2054,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 30L, 500L);
+				wait = new WebDriverWait((WebDriver) appiumDriver, 30L, 500L);
 				wait.until((Function) ExpectedConditions.visibilityOf(e));
 				waitSelenium = new WebDriverWait((WebDriver) this.remoteDriver, 60L, 500L);
 				waitSelenium.until((Function) ExpectedConditions.visibilityOf(e));
@@ -2249,10 +2090,10 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 30L, 500L);
-				wait.until((Function) ExpectedConditions.visibilityOf(this.appiumDriver.findElementByXPath(xpath)));
-				if (this.appiumDriver.findElementByXPath(xpath).isDisplayed()) {
-					element = this.appiumDriver.findElementByXPath(xpath);
+				wait = new WebDriverWait((WebDriver) appiumDriver, 30L, 500L);
+				wait.until((Function) ExpectedConditions.visibilityOf(appiumDriver.findElementByXPath(xpath)));
+				if (appiumDriver.findElementByXPath(xpath).isDisplayed()) {
+					element = appiumDriver.findElementByXPath(xpath);
 					ExtentUtility.getTest().log(LogStatus.PASS, String.valueOf(ElementName) + " is displayed",
 							ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
 				}
@@ -2284,9 +2125,9 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 30L, 500L);
-				wait.until((Function) ExpectedConditions.visibilityOf(this.appiumDriver.findElementByXPath(xpath)));
-				if (this.appiumDriver.findElementByXPath(xpath).isDisplayed())
+				wait = new WebDriverWait((WebDriver) appiumDriver, 30L, 500L);
+				wait.until((Function) ExpectedConditions.visibilityOf(appiumDriver.findElementByXPath(xpath)));
+				if (appiumDriver.findElementByXPath(xpath).isDisplayed())
 					ExtentUtility.getTest().log(LogStatus.PASS, String.valueOf(ElementName) + " is displayed",
 							ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
 				break;
@@ -2299,6 +2140,8 @@ public class PageBase {
 		return true;
 	}
 
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public boolean elementIsDisplayed(String xpath) throws Exception {
 		try {
 			WebDriverWait wait;
@@ -2315,8 +2158,8 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 30L, 500L);
-				wait.until((Function) ExpectedConditions.visibilityOf(this.appiumDriver.findElementByXPath(xpath)));
+				wait = new WebDriverWait((WebDriver) appiumDriver, 30L, 500L);
+				wait.until((Function) ExpectedConditions.visibilityOf(appiumDriver.findElementByXPath(xpath)));
 				break;
 			}
 		} catch (Exception exc) {
@@ -2325,6 +2168,7 @@ public class PageBase {
 		return true;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public boolean elementIsDisplayedByName(String name) throws Exception {
 		try {
 			WebDriverWait wait;
@@ -2335,14 +2179,13 @@ public class PageBase {
 				if (!str.equals("Selenium"))
 					break;
 				waitSelenium = new WebDriverWait((WebDriver) this.remoteDriver, 60L, 500L);
-				waitSelenium
-						.until((Function) ExpectedConditions.visibilityOf(this.remoteDriver.findElementByName(name)));
+				waitSelenium.until((Function) ExpectedConditions.visibilityOf(this.remoteDriver.findElementByName(name)));
 				break;
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 30L, 500L);
-				wait.until((Function) ExpectedConditions.visibilityOf(this.appiumDriver.findElementByName(name)));
+				wait = new WebDriverWait((WebDriver) appiumDriver, 30L, 500L);
+				wait.until((Function) ExpectedConditions.visibilityOf(appiumDriver.findElementByName(name)));
 				break;
 			}
 		} catch (Exception exc) {
@@ -2513,6 +2356,7 @@ public class PageBase {
 		driver.navigate().back();
 	}
 
+	@SuppressWarnings("serial")
 	public void clickCoordinates(int x, int y) {
 		String str;
 		switch ((str = this.toolName).hashCode()) {
@@ -2526,7 +2370,7 @@ public class PageBase {
 		case 1967770400:
 			if (!str.equals("Appium"))
 				break;
-			this.appiumDriver.executeScript("mobile: tap", new Object[] { new HashMap<String, Integer>(x, y) {
+			appiumDriver.executeScript("mobile: tap", new Object[] { new HashMap<String, Integer>(x, y) {
 
 			} });
 			break;
@@ -2646,9 +2490,9 @@ public class PageBase {
 	public void scrollDown(WebElement key) throws Exception {
 		Map<String, Object> args = new HashMap<>();
 		args.put("direction", "down");
-		this.appiumDriver.executeScript("mobile: swipe", new Object[] { args });
+		appiumDriver.executeScript("mobile: swipe", new Object[] { args });
 		args.put("direction", "down");
-		this.appiumDriver.executeScript("mobile: swipe", new Object[] { args });
+		appiumDriver.executeScript("mobile: swipe", new Object[] { args });
 	}
 
 	public void singleScrollDown() throws Exception {
@@ -2656,7 +2500,7 @@ public class PageBase {
 		while (!flag) {
 			Map<String, Object> args = new HashMap<>();
 			args.put("direction", "down");
-			this.appiumDriver.executeScript("mobile: swipe", new Object[] { args });
+			appiumDriver.executeScript("mobile: swipe", new Object[] { args });
 		}
 	}
 
@@ -2669,15 +2513,15 @@ public class PageBase {
 	public void swipeUp() throws Exception {
 		Map<String, Object> args = new HashMap<>();
 		args.put("direction", "up");
-		this.appiumDriver.executeScript("mobile: swipe", new Object[] { args });
+		appiumDriver.executeScript("mobile: swipe", new Object[] { args });
 	}
 
 	public void swipeLeft(WebElement key) throws Exception {
 		Map<String, Object> args = new HashMap<>();
 		args.put("direction", "left");
-		this.appiumDriver.executeScript("mobile: swipe", new Object[] { args });
+		appiumDriver.executeScript("mobile: swipe", new Object[] { args });
 		args.put("direction", "left");
-		this.appiumDriver.executeScript("mobile: swipe", new Object[] { args });
+		appiumDriver.executeScript("mobile: swipe", new Object[] { args });
 	}
 
 	public static void swipeLeft() throws Exception {
@@ -2701,9 +2545,9 @@ public class PageBase {
 	public void swipeRight(WebElement key) throws Exception {
 		Map<String, Object> args = new HashMap<>();
 		args.put("direction", "right");
-		this.appiumDriver.executeScript("mobile: swipe", new Object[] { args });
+		appiumDriver.executeScript("mobile: swipe", new Object[] { args });
 		args.put("direction", "right");
-		this.appiumDriver.executeScript("mobile: swipe", new Object[] { args });
+		appiumDriver.executeScript("mobile: swipe", new Object[] { args });
 	}
 
 	public void singleSwipeRight() throws Exception {
@@ -2713,50 +2557,17 @@ public class PageBase {
 		} else */{
 			args.put("direction", "right");
 		}
-		this.appiumDriver.executeScript("mobile: swipe", new Object[] { args });
+		appiumDriver.executeScript("mobile: swipe", new Object[] { args });
 	}
 
 	
 
-	public void swipeDownNVerify(String elementToBeDisplayed) throws Exception {
-		TouchAction action = new TouchAction((PerformsTouchActions) this.appiumDriver);
-		PointOption p1 = new PointOption();
-		PointOption p2 = new PointOption();
-		int startPos = 600;
-		int endPos = -10000;
-		for (int i = 0; i <= 20; i++) {
-			/*
-			 * if (locality_value.equalsIgnoreCase("Cloud")) { swipeUp(); } else {
-			 */ action.press(PointOption.point(0, startPos)).waitAction(WaitOptions.waitOptions(Duration.ofSeconds(1L)))
-					.moveTo(PointOption.point(0, endPos)).release().perform();
 
-			if (isElementDisplayed(2, elementToBeDisplayed, "Swipe down : " + elementToBeDisplayed) && i >= 1)
-				break;
-		}
-	}
 
-	public void swipeDownForNTimesVerify(String elementToBeDisplayed, int noOfSwipe) throws Exception {
-		TouchAction action = new TouchAction((PerformsTouchActions) this.appiumDriver);
-		PointOption p1 = new PointOption();
-		PointOption p2 = new PointOption();
-		int startPos = 600;
-		int endPos = -10000;
-		for (int i = 0; i <= 20; i++) {
-			/*
-			 * if (locality_value.equalsIgnoreCase("Cloud")) { swipeUp(); } else {
-			 */ action.press(PointOption.point(0, startPos)).waitAction(WaitOptions.waitOptions(Duration.ofSeconds(1L)))
-					.moveTo(PointOption.point(0, endPos)).release().perform();
-			// }
-			if (isElementDisplayed(2, elementToBeDisplayed, "Swipe down : " + elementToBeDisplayed) && i >= noOfSwipe)
-				break;
-		}
-
-	}
-
+	@SuppressWarnings({ "rawtypes", "static-access" })
 	public void swipeDownForNTimes(int noOfSwipe) throws Exception {
+		
 		TouchAction action = new TouchAction((PerformsTouchActions) this.appiumDriver);
-		PointOption p1 = new PointOption();
-		PointOption p2 = new PointOption();
 		int startPos = 600;
 		int endPos = -10000;
 		for (int i = 0; i < noOfSwipe; i++) {
@@ -2765,19 +2576,7 @@ public class PageBase {
 		}
 	}
 
-	public static void swipeMobile(AppiumDriver driver) {
-		Dimension size = driver.manage().window().getSize();
-		System.out.println(String.valueOf(size.height) + "height");
-		System.out.println(String.valueOf(size.width) + "width");
-		System.out.println(size);
-		int startPoint = size.width / 2;
-		int endPoint = (int) (size.width * 0.13D);
-		int ScreenPlace = (int) (size.height * 0.4D);
-		int y = (int) (size.height * 0.7D);
-		TouchAction ts = new TouchAction((PerformsTouchActions) driver);
-		ts.longPress(PointOption.point(40, 96)).waitAction(WaitOptions.waitOptions(Duration.ofMillis(1000L)))
-				.moveTo(PointOption.point(64, 1317)).release().perform();
-	}
+	
 
 	public void scrollToExact(WebElement key) throws Exception {
 		try {
@@ -2796,7 +2595,7 @@ public class PageBase {
 				args = new HashMap<>();
 				while (!flag && count <= 6) {
 					args.put("direction", "down");
-					this.appiumDriver.executeScript("mobile: swipe", new Object[] { args });
+					appiumDriver.executeScript("mobile: swipe", new Object[] { args });
 					count++;
 					if (elementIsDisplayed(key)) {
 						flag = true;
@@ -2826,7 +2625,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				action = new Actions((WebDriver) this.appiumDriver);
+				action = new Actions((WebDriver) appiumDriver);
 				action.moveToElement(key).build().perform();
 				break;
 			}
@@ -2837,11 +2636,8 @@ public class PageBase {
 		}
 	}
 
-	public void accessNotification() {
-		AndroidDriver android = (AndroidDriver) this.appiumDriver;
-		android.openNotifications();
-	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void keyboardActions(WebElement e, Keys key) {
 		try {
 			WebDriverWait wait, waitSelenium;
@@ -2857,7 +2653,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
+				wait = new WebDriverWait((WebDriver) appiumDriver, 60L, 500L);
 				wait.until((Function) ExpectedConditions.visibilityOf(e));
 				break;
 			}
@@ -2944,8 +2740,8 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				actions = new Actions((WebDriver) this.appiumDriver);
-				actions.moveToElement(this.appiumDriver.findElementByXPath(xpath1)).build().perform();
+				actions = new Actions((WebDriver) appiumDriver);
+				actions.moveToElement(appiumDriver.findElementByXPath(xpath1)).build().perform();
 				break;
 			}
 			ExtentUtility.getTest().log(LogStatus.PASS, "Move to element " + elementName + " successful",
@@ -2971,7 +2767,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				actions = new Actions((WebDriver) this.appiumDriver);
+				actions = new Actions((WebDriver) appiumDriver);
 				actions.moveToElement(element).build().perform();
 				break;
 			}
@@ -3121,10 +2917,10 @@ public class PageBase {
 		case 1967770400:
 			if (!str.equals("Appium"))
 				break;
-			wait = new WebDriverWait((WebDriver) this.appiumDriver, 900L);
+			wait = new WebDriverWait((WebDriver) appiumDriver, 900L);
 			wait.until((Function) new ExpectedCondition<Boolean>() {
 				public Boolean apply(WebDriver wdriver) {
-					return Boolean.valueOf(PageBase.this.appiumDriver
+					return Boolean.valueOf(PageBase.appiumDriver
 							.executeScript("return document.readyState", new Object[0]).equals("complete"));
 				}
 			});
@@ -3151,7 +2947,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
+				wait = new WebDriverWait((WebDriver) appiumDriver, 60L, 500L);
 				wait.until((Function) ExpectedConditions.visibilityOf(e));
 				break;
 			}
@@ -3163,6 +2959,7 @@ public class PageBase {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void waitForInvisibilityOfElement(String xpath) throws Exception {
 		try {
 			WebDriverWait wait;
@@ -3178,7 +2975,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 60L, 500L);
+				wait = new WebDriverWait((WebDriver) appiumDriver, 60L, 500L);
 				wait.until((Function) ExpectedConditions.invisibilityOfElementLocated(By.xpath(xpath)));
 				break;
 			}
@@ -3190,17 +2987,14 @@ public class PageBase {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "static-access" })
 	public void doubleClickOnString(WebElement element, String strNextWord) throws AWTException {
-		RemoteWebDriver remoteWebDriver;
 		AppiumDriver appiumDriver = null;
-		JavascriptExecutor js = null;
-		String JS_GET_WORD_RECT = "var ele=arguments[0], word=arguments[1], rg=document.createRange();   for(var c=ele.firstChild, i; c; c=c.nextSibling){                       if(c.nodeType != 3 || (i=c.nodeValue.indexOf(word)) < 0) continue;    rg.setStart(c, i); rg.setEnd(c, i + word.length);                     var r = ele.getBoundingClientRect(), rr = rg.getClientRects()[0];     return { left: (rr.left-r.left) | 0, top: (rr.top-r.top) | 0,                  width: rr.width | 0, height: rr.height | 0 };              };";
 		String str1;
 		switch ((str1 = this.toolName).hashCode()) {
 		case 1256533886:
 			if (!str1.equals("Selenium"))
 				break;
-			remoteWebDriver = this.remoteDriver;
 			break;
 		case 1967770400:
 			if (!str1.equals("Appium"))
@@ -3229,7 +3023,7 @@ public class PageBase {
 			if (!str2.equals("Appium"))
 				break;
 			System.out.println("before press");
-			(new Actions((WebDriver) this.appiumDriver))
+			(new Actions((WebDriver) appiumDriver))
 					.moveToElement(element, offset_x.intValue(), offset_y.intValue()).doubleClick().build().perform();
 			System.out.println("after press");
 			break;
@@ -3290,65 +3084,11 @@ public class PageBase {
 		return false;
 	}
 
-	public void clickBackButton() {
-		((AndroidDriver) this.appiumDriver).pressKeyCode(4);
-	}
-
-	public void scroll(int fromX, int fromY, int toX, int toY) {
-		TouchAction touchAction = new TouchAction((PerformsTouchActions) this.appiumDriver);
-	}
-
-	public void scrollUp(WebElement element) throws Exception {
-		boolean flag = false;
-		int i = 0;
-		int pressX = (this.appiumDriver.manage().window().getSize()).width / 2;
-		int bottomY = (this.appiumDriver.manage().window().getSize()).height * 4 / 5;
-		int topY = (this.appiumDriver.manage().window().getSize()).height / 8;
-		while (!flag && i <= 5) {
-			scroll(pressX, bottomY, pressX, topY);
-			i = i++;
-			if (elementIsDisplayed(element))
-				flag = true;
-		}
-	}
 
 	public void scroll1(int fromX, int fromY, int toX, int toY) {
-		TouchAction touchAction = new TouchAction((PerformsTouchActions) this.appiumDriver);
+		TouchAction touchAction = new TouchAction((PerformsTouchActions) appiumDriver);
 	}
 
-	public void scrollDownAndroid(int durationInMs) throws Exception {
-		Dimension size = this.appiumDriver.manage().window().getSize();
-		System.out.println(size);
-		int starty = (int) (size.height * 0.5D);
-		int endy = (int) (size.height * 0.2D);
-		int startx = size.width / 2;
-		scroll(startx, endy, startx, starty);
-		scroll(startx, endy, startx, starty);
-		scroll(startx, endy, startx, starty);
-	}
-
-	public void rightLeftSwipe(int durationInMs) throws Exception {
-		Dimension size = this.appiumDriver.manage().window().getSize();
-		System.out.println(size);
-		int startx = (int) (size.width * 0.9D);
-		int endx = (int) (size.width * 0.3D);
-		int starty = size.height / 2;
-		scroll(startx, starty, endx, starty);
-		scroll(startx, starty, endx, starty);
-		scroll(startx, starty, endx, starty);
-		scroll(startx, starty, endx, starty);
-		scroll(startx, starty, endx, starty);
-		scroll(startx, starty, endx, starty);
-	}
-
-	public void leftRightSwipe(int durationInMs) throws Exception {
-		Dimension size = this.appiumDriver.manage().window().getSize();
-		System.out.println(size);
-		int startx = (int) (size.width * 0.7D);
-		int endx = (int) (size.width * 0.3D);
-		int starty = size.height / 2;
-		scroll(endx, starty, startx, starty);
-	}
 
 	public static void swipeHorizontal(AppiumDriver<WebElement> driver) throws Exception {
 		AppiumDriver<WebElement> appiumDriver = driver;
@@ -3394,8 +3134,8 @@ public class PageBase {
 
 	public WebElement check_AccessibilityElementPresent(String strElement, String updateLog) throws IOException {
 		try {
-			if (this.appiumDriver.findElementByAccessibilityId(strElement) != null)
-				return this.appiumDriver.findElementByAccessibilityId(strElement);
+			if (appiumDriver.findElementByAccessibilityId(strElement) != null)
+				return appiumDriver.findElementByAccessibilityId(strElement);
 			return null;
 		} catch (Exception E) {
 			System.out.println(E.toString());
@@ -3403,14 +3143,9 @@ public class PageBase {
 		}
 	}
 
-	public void click_mobiletap_coordinates(int x, int y) throws Exception {
-		TouchAction action = new TouchAction((PerformsTouchActions) this.appiumDriver);
-	}
 
-	public void click_mobiletap_coordinates1(int x, int y) throws Exception {
-		TouchAction action = new TouchAction((PerformsTouchActions) this.appiumDriver);
-	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void Page(WebElement e, String elementName) throws Exception {
 		try {
 			WebDriverWait wait, waitSelenium;
@@ -3425,7 +3160,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				wait = new WebDriverWait((WebDriver) this.appiumDriver, 80L, 500L);
+				wait = new WebDriverWait((WebDriver) appiumDriver, 80L, 500L);
 				wait.until((Function) ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(e)));
 				break;
 			}
@@ -3455,7 +3190,7 @@ public class PageBase {
 
 	public boolean isAccessibilityElementPresent(String strElement) {
 		try {
-			return this.appiumDriver.findElementByAccessibilityId(strElement).isDisplayed();
+			return appiumDriver.findElementByAccessibilityId(strElement).isDisplayed();
 		} catch (Exception e) {
 			return false;
 		}
@@ -3478,7 +3213,7 @@ public class PageBase {
 
 	public WebElement chkisAccessibilityElementPresent(String strElement) {
 		try {
-			WebElement element = this.appiumDriver.findElementByAccessibilityId(strElement);
+			WebElement element = appiumDriver.findElementByAccessibilityId(strElement);
 			if (element.isDisplayed())
 				return element;
 			return null;
@@ -3489,7 +3224,7 @@ public class PageBase {
 
 	public WebElement chkElement_ByAccessibilityId(String accId, int accId_Index) {
 		try {
-			List<WebElement> getaccId_List = this.appiumDriver.findElementsByAccessibilityId(accId);
+			List<WebElement> getaccId_List = appiumDriver.findElementsByAccessibilityId(accId);
 			if (getaccId_List != null) {
 				if (getaccId_List.size() >= 0)
 					return getaccId_List.get(accId_Index);
@@ -3589,187 +3324,7 @@ public class PageBase {
 			l++;
 	}
 
-	public void AppDetect_VideoPlayDesktop(Point location, Dimension size) throws IOException, InterruptedException {
-		int ret = 0;
-		for (int i = 0; i < 7; i++) {
-			String filename = "Errors/error.png";
-			File file1 = null;
-			String str1;
-			switch ((str1 = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str1.equals("Selenium"))
-					break;
-				file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			case 1967770400:
-				if (!str1.equals("Appium"))
-					break;
-				file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			}
-			FileUtils.copyFile(file1, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			double left = location.x;
-			double top = location.y;
-			double bottom = (location.y + size.getHeight());
-			double right = (location.x + size.getWidth());
-			Rect faceDetections = new Rect(480, 350, 196, 170);
-			Mat img = new Mat(img1, faceDetections);
-			Imgcodecs.imwrite("Errors/error5.png", img);
-			ret = checkmotion(img);
-		}
-		if (ret == 0) {
-			System.out.println("Video is not playing");
-			ExtentUtility.getTest().log(LogStatus.FAIL, " Verify the Video motion when played - Video is not Playing",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		} else {
-			System.out.println("Video is playing");
-			ExtentUtility.getTest().log(LogStatus.PASS, "Verify the Video motion when played - Video is Playing",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		}
-		image = null;
-		image1 = null;
-		image2 = null;
-	}
-
-	public void AppDetect_VideoPause_Desktop(Point location, Dimension size) throws IOException, InterruptedException {
-		int ret = 0;
-		for (int i = 0; i < 6; i++) {
-			String filename = "Errors/error.png";
-			File file1 = null;
-			String str1;
-			switch ((str1 = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str1.equals("Selenium"))
-					break;
-				file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			case 1967770400:
-				if (!str1.equals("Appium"))
-					break;
-				file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			}
-			FileUtils.copyFile(file1, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			double left = location.x;
-			double top = location.y;
-			double bottom = (location.y + size.getHeight() - 100);
-			double right = (location.x + size.getWidth() - 130);
-			Rect faceDetections = new Rect(480, 350, 196, 170);
-			Mat img = new Mat(img1, faceDetections);
-			ret = checkmotion(img);
-		}
-		if (ret == 0) {
-			System.out.println("Video is not playing");
-			ExtentUtility.getTest().log(LogStatus.PASS,
-					" Verify the Video motion when paused - Video is not Playing After clicking on the Pause button",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		} else {
-			System.out.println("Video is playing");
-			ExtentUtility.getTest().log(LogStatus.FAIL,
-					" Verify the Video motion when paused -  Video is  Playing After clicking on the Pause button ",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		}
-		image = null;
-		image1 = null;
-		image2 = null;
-	}
-
-	public void AppDetect_VideoPause_Mobile(Point location, Dimension size) throws IOException, InterruptedException {
-		int ret = 0;
-		for (int i = 0; i < 6; i++) {
-			String filename = "Errors/pause.png";
-			File file1 = null;
-			String str1;
-			switch ((str1 = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str1.equals("Selenium"))
-					break;
-				file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			case 1967770400:
-				if (!str1.equals("Appium"))
-					break;
-				file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			}
-			FileUtils.copyFile(file1, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			double left = location.x;
-			double top = location.y;
-			double bottom = (location.y + size.getHeight() - 100);
-			double right = (location.x + size.getWidth() - 130);
-			Rect faceDetections = new Rect((int) left, (int) top, (int) right, (int) bottom);
-			Mat img = new Mat(img1, faceDetections);
-			Imgcodecs.imwrite("Errors/pause.png", img);
-			ret = checkmotion(img);
-		}
-		if (ret == 0) {
-			System.out.println("Video is not playing");
-			ExtentUtility.getTest().log(LogStatus.PASS, " Video is not Playing After clicking on the Pause button",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		} else {
-			System.out.println("Video is playing");
-			ExtentUtility.getTest().log(LogStatus.FAIL, "  Video is  Playing After clicking on the Pause button ",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		}
-		image = null;
-		image1 = null;
-		image2 = null;
-	}
-
-	public ArrayList<String> getimageloc(Mat templ) throws IOException {
-		int match = 0;
-		ArrayList<String> list = new ArrayList<>();
-		Point loc = null;
-		for (int k = 0; k < 20; k++) {
-			Point matchLoc;
-			String filename = "Errors/error1.png";
-			File file1 = null;
-			String str1;
-			switch ((str1 = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str1.equals("Selenium"))
-					break;
-				file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			case 1967770400:
-				if (!str1.equals("Appium"))
-					break;
-				file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			}
-			FileUtils.copyFile(file1, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			CascadeClassifier faceDetector = new CascadeClassifier();
-			System.out.println("Running Template Matching");
-			int result_cols = img1.cols() - templ.cols() + 1;
-			int result_rows = img1.rows() - templ.rows() + 1;
-			Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
-			Imgcodecs.imwrite("Errors/templatewe" + k + ".png", img1);
-			String match_method = "Imgproc.TM_CCOEFF_NORMED";
-			Imgproc.matchTemplate(img1, templ, result, 5);
-			Imgproc.threshold(result, result, 0.5D, 1.0D, 3);
-			Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-			if (match_method == "Imgproc.TM_SQDIFF" || match_method == "Imgproc.TM_SQDIFF_NORMED") {
-				matchLoc = mmr.minLoc;
-			} else {
-				matchLoc = mmr.maxLoc;
-			}
-			System.out.println(matchLoc);
-			System.out.println(mmr.maxVal);
-			double threashhold = 0.7D;
-			if (mmr.maxVal > threashhold) {
-				System.out.println(mmr.maxVal);
-				System.out.println("match Found");
-				loc = mmr.maxLoc;
-				// list = getPoints(loc);
-				break;
-			}
-		}
-		return list;
-	}
+	
 
 	public boolean CheckImageinVideo(Mat templ, double d) throws IOException {
 		boolean status = false;
@@ -3787,7 +3342,7 @@ public class PageBase {
 			case 1967770400:
 				if (!str1.equals("Appium"))
 					break;
-				file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
+				file1 = (File) appiumDriver.getScreenshotAs(OutputType.FILE);
 				break;
 			}
 			FileUtils.copyFile(file1, new File(filename));
@@ -3815,364 +3370,14 @@ public class PageBase {
 		return status;
 	}
 
-	public boolean CheckImageInPage(Mat templ) throws IOException {
-		boolean status = false;
-		Point loc = null;
-		String filename = "Errors/error1.png";
-		File file1 = null;
-		String str1;
-		switch ((str1 = this.toolName).hashCode()) {
-		case 1256533886:
-			if (!str1.equals("Selenium"))
-				break;
-			file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-			break;
-		case 1967770400:
-			if (!str1.equals("Appium"))
-				break;
-			file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-			break;
-		}
-		FileUtils.copyFile(file1, new File(filename));
-		Mat img1 = Imgcodecs.imread(filename, 1);
-		int result_cols = img1.cols() - templ.cols() + 1;
-		int result_rows = img1.rows() - templ.rows() + 1;
-		Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
-		String match_method = "Imgproc.TM_CCOEFF_NORMED";
-		Imgproc.matchTemplate(img1, templ, result, 5);
-		Imgproc.threshold(result, result, 0.5D, 1.0D, 3);
-		Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-		if (match_method == "Imgproc.TM_SQDIFF" || match_method == "Imgproc.TM_SQDIFF_NORMED") {
-			Point matchLoc = mmr.minLoc;
-		} else {
-			Point matchLoc = mmr.maxLoc;
-		}
-		double threashhold = 0.9D;
-		if (mmr.maxVal >= threashhold) {
-			System.out.println("match Found");
-			loc = mmr.maxLoc;
-			status = true;
-		}
-		return status;
-	}
-
-	public void CheckImageInPage_click(Mat templ, WebElement e) throws Exception {
-		int a;
-		e.click();
-		int height = this.appiumDriver.manage().window().getSize().getHeight();
-		if (height == 1536 || height == 2048) {
-			a = 1;
-		} else {
-			a = 2;
-			Thread.sleep(4000L);
-		}
-		boolean status = false;
-		Point loc = null;
-		String filename = String.valueOf(System.getProperty("user.dir")) + "/ReportGenerator/"
-				+ ExtentUtility.reportFolder + "/Screenshots/videoAd" + a + ".png";
-		File file1 = null;
-		String str1;
-		switch ((str1 = this.toolName).hashCode()) {
-		case 1256533886:
-			if (!str1.equals("Selenium"))
-				break;
-			file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-			break;
-		case 1967770400:
-			if (!str1.equals("Appium"))
-				break;
-			file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-			break;
-		}
-		FileUtils.copyFile(file1, new File(filename));
-		Mat img1 = Imgcodecs.imread(filename, 1);
-		int result_cols = img1.cols() - templ.cols() + 1;
-		int result_rows = img1.rows() - templ.rows() + 1;
-		Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
-		String match_method = "Imgproc.TM_CCOEFF_NORMED";
-		Imgproc.matchTemplate(img1, templ, result, 5);
-		Imgproc.threshold(result, result, 0.5D, 1.0D, 3);
-		Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-		if (match_method == "Imgproc.TM_SQDIFF" || match_method == "Imgproc.TM_SQDIFF_NORMED") {
-			Point matchLoc = mmr.minLoc;
-		} else {
-			Point matchLoc = mmr.maxLoc;
-		}
-		double threashhold = 0.9D;
-		if (mmr.maxVal >= threashhold) {
-			System.out.println("match Found");
-			loc = mmr.maxLoc;
-			status = true;
-		}
-		if (status) {
-			ExtentUtility.getTest().log(LogStatus.INFO,
-					"Verify Video Sponsor Ad - Video Sponsor Ad is displayed in the video",
-					ExtentUtility.getTest().addScreenCapture(filename));
-		} else {
-			ExtentUtility.getTest().log(LogStatus.INFO,
-					"Verify Video Sponsor Ad - Video Sponsor Ad is not displayed in the video",
-					ExtentUtility.getTest().addScreenCapture(filename));
-		}
-	}
-
-	public void CheckImageInPage_click1(Mat templ, WebElement e) throws Exception {
-		clickCoordinates(120, 450);
-		Thread.sleep(3000L);
-		boolean status = false;
-		Point loc = null;
-		String filename = String.valueOf(System.getProperty("user.dir")) + "/ReportGenerator/"
-				+ ExtentUtility.reportFolder + "/Screenshots/videoAd.png";
-		File file1 = null;
-		String str1;
-		switch ((str1 = this.toolName).hashCode()) {
-		case 1256533886:
-			if (!str1.equals("Selenium"))
-				break;
-			file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-			break;
-		case 1967770400:
-			if (!str1.equals("Appium"))
-				break;
-			file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-			break;
-		}
-		FileUtils.copyFile(file1, new File(filename));
-		Mat img1 = Imgcodecs.imread(filename, 1);
-		int result_cols = img1.cols() - templ.cols() + 1;
-		int result_rows = img1.rows() - templ.rows() + 1;
-		Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
-		String match_method = "Imgproc.TM_CCOEFF_NORMED";
-		Imgproc.matchTemplate(img1, templ, result, 5);
-		Imgproc.threshold(result, result, 0.5D, 1.0D, 3);
-		Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-		if (match_method == "Imgproc.TM_SQDIFF" || match_method == "Imgproc.TM_SQDIFF_NORMED") {
-			Point matchLoc = mmr.minLoc;
-		} else {
-			Point matchLoc = mmr.maxLoc;
-		}
-		double threashhold = 0.9D;
-		if (mmr.maxVal >= threashhold) {
-			System.out.println("match Found");
-			loc = mmr.maxLoc;
-			status = true;
-		}
-		if (status) {
-			ExtentUtility.getTest().log(LogStatus.INFO,
-					"Verify Video Sponsor Ad - Video Sponsor Ad is displayed in the video",
-					ExtentUtility.getTest().addScreenCapture(filename));
-		} else {
-			ExtentUtility.getTest().log(LogStatus.INFO,
-					"Verify Video Sponsor Ad - Video Sponsor Ad is not displayed in the video",
-					ExtentUtility.getTest().addScreenCapture(filename));
-		}
-	}
-
-	public void CheckBlackScreen_mobile(Mat templ) throws Exception {
-		boolean status = false;
-		Point loc = null;
-		String filename = String.valueOf(System.getProperty("user.dir")) + "/ReportGenerator/"
-				+ ExtentUtility.reportFolder + "/Screenshots/blackScreenImage.png";
-		File file1 = null;
-		String str1;
-		switch ((str1 = this.toolName).hashCode()) {
-		case 1256533886:
-			if (!str1.equals("Selenium"))
-				break;
-			file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-			break;
-		case 1967770400:
-			if (!str1.equals("Appium"))
-				break;
-			file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-			break;
-		}
-		FileUtils.copyFile(file1, new File(filename));
-		Mat img1 = Imgcodecs.imread(filename, 1);
-		int result_cols = img1.cols() - templ.cols() + 1;
-		int result_rows = img1.rows() - templ.rows() + 1;
-		Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
-		String match_method = "Imgproc.TM_CCOEFF_NORMED";
-		Imgproc.matchTemplate(img1, templ, result, 5);
-		Imgproc.threshold(result, result, 0.5D, 1.0D, 3);
-		Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-		if (match_method == "Imgproc.TM_SQDIFF" || match_method == "Imgproc.TM_SQDIFF_NORMED") {
-			Point matchLoc = mmr.minLoc;
-		} else {
-			Point matchLoc = mmr.maxLoc;
-		}
-		double threashhold = 0.9D;
-		if (mmr.maxVal >= threashhold) {
-			System.out.println("match Found");
-			loc = mmr.maxLoc;
-			status = true;
-		}
-		if (status) {
-			ExtentUtility.getTest().log(LogStatus.INFO, "Verify Black Screen - Black Screen is displayed",
-					ExtentUtility.getTest().addScreenCapture(filename));
-		} else {
-			ExtentUtility.getTest().log(LogStatus.INFO, "Verify Black Screen - Black Screen is not displayed",
-					ExtentUtility.getTest().addScreenCapture(filename));
-		}
-	}
-
-	public String extract_Text(Point location, Dimension size) throws IOException, TesseractException {
-		StringBuffer result = new StringBuffer();
-		for (int k = 0; k < 3; k++) {
-			String filename = "Errors/error1.png";
-			File file1 = null;
-			String str1;
-			switch ((str1 = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str1.equals("Selenium"))
-					break;
-				file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			case 1967770400:
-				if (!str1.equals("Appium"))
-					break;
-				file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			}
-			FileUtils.copyFile(file1, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			double left = location.x;
-			double top = location.y;
-			double bottom = (location.y + size.getHeight() + 500);
-			double right = (location.x + size.getWidth() + 700);
-			Rect faceDetections = new Rect((int) left, (int) top, (int) right, (int) bottom);
-			Mat img2 = new Mat(img1, faceDetections);
-			System.out.println(img2.height() + img2.width());
-			Mat imgGray = new Mat();
-			Imgproc.cvtColor(img2, imgGray, 6);
-			Mat imgGaussianBlur = new Mat();
-			Imgproc.GaussianBlur(imgGray, imgGaussianBlur, new Size(3.0D, 3.0D), 0.0D);
-			Mat imgAdaptiveThreshold = new Mat();
-			Imgcodecs.imwrite("preprocess/adaptive_threshold.png", img2);
-			File imageFile = new File("preprocess/adaptive_threshold.png");
-			Tesseract tesseract = new Tesseract();
-			tesseract.setLanguage("eng");
-			result.append(tesseract.doOCR(imageFile));
-		}
-		String Text = result.toString();
-		return Text;
-	}
-
-	public void clickCoordinates(int x, int y, String element) throws IOException {
-		try {
-			String str;
-			switch ((str = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str.equals("Selenium"))
-					break;
-				this.remoteDriver.executeScript("mobile: tap", new Object[] { new HashMap<String, Integer>(x, y) {
-
-				} });
-				break;
-			case 1967770400:
-				if (!str.equals("Appium"))
-					break;
-				this.appiumDriver.executeScript("mobile: tap", new Object[] { new HashMap<String, Integer>(x, y) {
-
-				} });
-				break;
-			}
-			ExtentUtility.getTest().log(LogStatus.PASS, "Clicked successfully on " + element,
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		} catch (
-
-		Exception e) {
-			ExtentUtility.getTest().log(LogStatus.FAIL, "Exception on clciking on element" + element,
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		}
-	}
-
-	public String extract_Text_with_coordinates(int left, int top, int bottom, int right, int timeout)
-			throws IOException, TesseractException {
-		StringBuffer result = new StringBuffer();
-		for (int k = 0; k < 1 * timeout; k++) {
-			String filename = "preprocess/subtitle.png";
-			File file1 = new File("preprocess/subtitle.png");
-			String str1;
-			switch ((str1 = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str1.equals("Selenium"))
-					break;
-				file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			case 1967770400:
-				if (!str1.equals("Appium"))
-					break;
-				file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			}
-			FileUtils.copyFile(file1, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 0);
-			Rect faceDetections = new Rect(left, top, bottom, right);
-			Mat img2 = new Mat(img1, faceDetections);
-			Mat imgGaussianBlur = new Mat();
-			Imgproc.GaussianBlur(img2, imgGaussianBlur, new Size(3.0D, 3.0D), 0.0D);
-			Imgcodecs.imwrite("preprocess/adaptive_threshold.png", imgGaussianBlur);
-			File imageFile = new File("preprocess/adaptive_threshold.png");
-			Tesseract instance = new Tesseract();
-			instance.setLanguage("eng");
-			result.append(instance.doOCR(imageFile));
-		}
-		String Text = result.toString();
-		return Text;
-	}
-
-	public String extract_Text_Desktop(Point location, Dimension size) throws IOException, TesseractException {
-		StringBuffer result = new StringBuffer();
-		int ret = 0;
-		for (int k = 0; k < 3; k++) {
-			String filename = "Errors/subtitles.png";
-			File file1 = null;
-			String str1;
-			switch ((str1 = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str1.equals("Selenium"))
-					break;
-				file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			case 1967770400:
-				if (!str1.equals("Appium"))
-					break;
-				file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			}
-			FileUtils.copyFile(file1, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 0);
-			double left = (location.x + 100);
-			double top = (location.y + 100);
-			double bottom = (location.y + size.getHeight() - 50);
-			double right = (location.x + size.getWidth() - 130);
-			Rect faceDetections = new Rect((int) left, (int) top, (int) right, (int) bottom);
-			Mat img2 = new Mat(img1, faceDetections);
-			Imgcodecs.imwrite("Errors/error.png", img2);
-			Mat imgGaussianBlur = new Mat();
-			Imgproc.GaussianBlur(img2, imgGaussianBlur, new Size(3.0D, 3.0D), 0.0D);
-			Imgcodecs.imwrite("preprocess/subtitle.png", imgGaussianBlur);
-			File imageFile = new File("preprocess/subtitle.png");
-			Tesseract tesseract = new Tesseract();
-			tesseract.setLanguage("eng");
-			try {
-				System.out.println(tesseract.doOCR(imageFile));
-				result.append(tesseract.doOCR(imageFile));
-				System.out.println("Result appended");
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
-		}
-		String Text = result.toString();
-		return Text;
-	}
+	
 
 	public boolean isElementEnabled(String xpath, String element) throws Exception {
 		boolean result = false;
 		System.out.println("Verify is Element Enabled : " + element);
-		this.appiumDriver.manage().timeouts().implicitlyWait(60L, TimeUnit.SECONDS);
+		appiumDriver.manage().timeouts().implicitlyWait(60L, TimeUnit.SECONDS);
 		try {
-			return result = this.appiumDriver.findElementByXPath(xpath).isEnabled();
+			return result = appiumDriver.findElementByXPath(xpath).isEnabled();
 		} catch (Exception exception) {
 			return result;
 		}
@@ -4208,71 +3413,13 @@ method to wait for element display as a web element
 		boolean result = false;
 		System.out.println("Verify is Element Selected : " + element);
 		try {
-			return result = this.appiumDriver.findElementByXPath(xpath).isSelected();
+			return result = appiumDriver.findElementByXPath(xpath).isSelected();
 		} catch (Exception exception) {
 			return result;
 		}
 	}
 
-	public boolean CheckImageinVideo(Mat templ, double d, Point location, Dimension size) throws IOException {
-		ArrayList<String> list = new ArrayList<>();
-		boolean status = false;
-		Point loc = null;
-		for (int k = 0; k < d * 10.0D; k++) {
-			String filename = "Errors/errorss.png";
-			File file1 = null;
-			String str1;
-			switch ((str1 = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str1.equals("Selenium"))
-					break;
-				file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			case 1967770400:
-				if (!str1.equals("Appium"))
-					break;
-				file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			}
-			FileUtils.copyFile(file1, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			System.out.println("Running Template Matching");
-			double left = location.x;
-			double top = location.y;
-			double bottom = (location.y + size.getHeight() - 100);
-			double right = (location.x + size.getWidth() - 130);
-			Rect faceDetections = new Rect((int) left, (int) top, (int) right, (int) bottom);
-			img1 = new Mat(img1, faceDetections);
-			int result_cols = img1.cols() - templ.cols() + 1;
-			int result_rows = img1.rows() - templ.rows() + 1;
-			Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
-			String match_method = "Imgproc.TM_CCOEFF_NORMED";
-			Imgproc.matchTemplate(img1, templ, result, 5);
-			Imgproc.threshold(result, result, 0.5D, 1.0D, 3);
-			Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-			if (match_method == "Imgproc.TM_SQDIFF" || match_method == "Imgproc.TM_SQDIFF_NORMED") {
-				Point matchLoc = mmr.minLoc;
-			} else {
-				Point matchLoc = mmr.maxLoc;
-			}
-			double threashhold = 0.8D;
-			if (mmr.maxVal > threashhold) {
-				loc = mmr.maxLoc;
-				// list = getPoints(loc);
-				status = true;
-				break;
-			}
-		}
-		if (status) {
-			ExtentUtility.getTest().log(LogStatus.INFO, " Video is Buffering ",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot((WebDriver) this.remoteDriver)));
-		} else {
-			System.out.println(" No match Found");
-			ExtentUtility.getTest().log(LogStatus.INFO, "No Buffering of Video",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot((WebDriver) this.remoteDriver)));
-		}
-		return status;
-	}
+	
 
 	public void dragAndDropThumb(WebElement e1, int n) throws Exception {
 		try {
@@ -4289,7 +3436,7 @@ method to wait for element display as a web element
 			case 1967770400:
 				if (!str.equals("Appium"))
 					break;
-				action = new Actions((WebDriver) this.appiumDriver);
+				action = new Actions((WebDriver) appiumDriver);
 				action.dragAndDropBy(e1, n, 0).perform();
 				break;
 			}
@@ -4301,592 +3448,8 @@ method to wait for element display as a web element
 		}
 	}
 
-	public void dragAndDropSeekBar(WebElement element, double i, String fw_rw) throws Exception {
-		try {
-			int start = element.getLocation().getX();
-			int end = element.getSize().getWidth();
-			int y = element.getLocation().getY();
-			TouchAction action = new TouchAction((PerformsTouchActions) this.appiumDriver);
-			if (fw_rw.equalsIgnoreCase("fw")) {
-				int j = (int) (end * i);
-			} else {
-				int j = (int) (end * i);
-			}
-		} catch (Exception exception) {
-		}
-	}
 
-	public int checkmotion(Mat img) {
-		int retVal = 0;
-		int mistakes = 0;
-		if (image == null) {
-			image = img;
-		} else if (image1 == null) {
-			image1 = img;
-		} else if (image2 == null) {
-			image2 = img;
-		}
-		if (image != null && image1 != null && image2 != null) {
-			Mat t_minus = image;
-			Mat t = image1;
-			Mat t_plus = image2;
-			Mat dst = new Mat();
-			Mat dst1 = new Mat();
-			Core.absdiff(t_minus, t, dst);
-			Core.absdiff(t, t_plus, dst1);
-			Mat reshaped = dst.reshape(1);
-			Mat reshaped1 = dst1.reshape(1);
-			mistakes = Core.countNonZero(reshaped) + Core.countNonZero(reshaped1);
-			reshaped.release();
-			dst.release();
-			dst1.release();
-		}
-		return mistakes;
-	}
 
-	public void AppDetect_VideoPlay(Point location, Dimension size) throws IOException, InterruptedException {
-		int ret = 0;
-		for (int i = 0; i < 4; i++) {
-			String imageFolder;
-			Thread.sleep(1000L);
-			int height = this.appiumDriver.manage().window().getSize().getHeight();
-			if (height == 1536 || height == 2048) {
-				imageFolder = "Error";
-			} else {
-				imageFolder = "Error1";
-			}
-			String filename = String.valueOf(imageFolder) + "/error.png";
-			File file1 = null;
-			String str1;
-			switch ((str1 = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str1.equals("Selenium"))
-					break;
-				file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			case 1967770400:
-				if (!str1.equals("Appium"))
-					break;
-				file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			}
-			FileUtils.copyFile(file1, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			Rect faceDetections = new Rect(40, 200, 2000, 800);
-			Mat img = new Mat(img1, faceDetections);
-			Imgcodecs.imwrite(String.valueOf(imageFolder) + "/error3" + i + ".png", img);
-			ret = checkmotion(img);
-		}
-		if (ret == 0) {
-			System.out.println("Verify the Video motion when playing - Video is not playing");
-			ExtentUtility.getTest().log(LogStatus.FAIL, "Verify the Video motion when played - Video is not Playing",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		} else {
-			System.out.println("Verify the Video motion when playing - Video is Playing in Full Screen");
-			ExtentUtility.getTest().log(LogStatus.PASS,
-					"Verify the Video motion when playing - Video is Playing in Full Screen",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		}
-		image = null;
-		image1 = null;
-		image2 = null;
-	}
-
-	public void AppDetect_VideoPlay_iOS(Dimension size) throws IOException, InterruptedException {
-		int ret = 0;
-		for (int i = 0; i < 3; i++) {
-			String filename = "Errors/error.png";
-			File file1 = null;
-			String str1;
-			switch ((str1 = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str1.equals("Selenium"))
-					break;
-				file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			case 1967770400:
-				if (!str1.equals("Appium"))
-					break;
-				file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			}
-			FileUtils.copyFile(file1, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			Rect faceDetections = new Rect(30, 30, 900, 1400);
-			Mat img = new Mat(img1, faceDetections);
-			Imgcodecs.imwrite("Errors/error3.png", img);
-			ret = checkmotion(img);
-		}
-		if (ret == 0) {
-			System.out.println("Verify the Video motion when playing - Video is not playing");
-			ExtentUtility.getTest().log(LogStatus.FAIL, "Verify the Video motion when played - Video is not Playing",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		} else {
-			System.out.println("Verify the Video motion when playing - Video is playing");
-			ExtentUtility.getTest().log(LogStatus.PASS,
-					"Verify the Video motion when played - Video is Playing in Full Screen",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		}
-		image = null;
-		image1 = null;
-		image2 = null;
-	}
-
-	public void AppDetect_VideoPause(Point location, Dimension size) throws IOException, InterruptedException {
-		int ret = 0;
-		for (int i = 0; i < 4; i++) {
-			String imageFolder;
-			Thread.sleep(1000L);
-			int height = this.appiumDriver.manage().window().getSize().getHeight();
-			if (height == 1536 || height == 2048) {
-				imageFolder = "Error";
-			} else {
-				imageFolder = "Error1";
-			}
-			String filename = String.valueOf(imageFolder) + "/error.png";
-			File file1 = null;
-			String str1;
-			switch ((str1 = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str1.equals("Selenium"))
-					break;
-				file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			case 1967770400:
-				if (!str1.equals("Appium"))
-					break;
-				file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			}
-			FileUtils.copyFile(file1, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			Rect faceDetections = new Rect(40, 200, 2000, 800);
-			Mat img = new Mat(img1, faceDetections);
-			Imgcodecs.imwrite(String.valueOf(imageFolder) + "/error2" + i + ".png", img);
-			ret = checkmotion(img);
-		}
-		if (ret == 0) {
-			System.out
-					.println("Verify the Video motion when paused - Video is not Playing After tapping the Pause icon");
-			ExtentUtility.getTest().log(LogStatus.PASS,
-					"Verify the Video motion when paused - Video is not Playing After tapping the Pause icon",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		} else {
-			System.out.println("Verify the Video motion when paused - Video is Playing After tapping the Pause icon");
-			ExtentUtility.getTest().log(LogStatus.FAIL,
-					"Verify the Video motion when paused - Video is Playing After tapping the Pause icon",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		}
-		image = null;
-		image1 = null;
-		image2 = null;
-	}
-
-	public void matchimage(AppiumDriver driver, Mat templ, Point location, Dimension size) throws IOException {
-		try {
-			int match = 0;
-			for (int k = 0; k < 20; k++) {
-				String filename = "Errors/error1.png";
-				File src = (File) driver.getScreenshotAs(OutputType.FILE);
-				FileUtils.copyFile(src, new File(filename));
-				Mat img1 = Imgcodecs.imread(filename, 1);
-				double left = location.x;
-				double top = location.y;
-				double bottom = (location.y + size.getHeight() - 60);
-				double right = (location.x + size.getWidth() - 140);
-				CascadeClassifier faceDetector = new CascadeClassifier();
-				System.out.println("Running Template Matching");
-				int result_cols = img1.cols() - templ.cols() + 1;
-				int result_rows = img1.rows() - templ.rows() + 1;
-				Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
-				String match_method = "Imgproc.TM_CCOEFF_NORMED";
-				Imgproc.matchTemplate(img1, templ, result, 5);
-				Imgcodecs.imwrite("Errors/templatewe" + k + ".png", img1);
-				Imgproc.threshold(result, result, 0.5D, 1.0D, 3);
-				Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-				if (match_method == "Imgproc.TM_SQDIFF" || match_method == "Imgproc.TM_SQDIFF_NORMED") {
-					Point matchLoc = mmr.minLoc;
-				} else {
-					Point matchLoc = mmr.maxLoc;
-				}
-				System.out.println(mmr.minLoc);
-				System.out.println(mmr.maxLoc);
-				System.out.println(mmr.maxVal);
-				double threashhold = 0.7D;
-				if (mmr.maxVal > threashhold) {
-					System.out.println(mmr.maxVal);
-					System.out.println("match Found");
-					match++;
-					break;
-				}
-			}
-			if (match == 1) {
-				ExtentUtility.getTest().log(LogStatus.PASS, " Result = Match Is Found ",
-						ExtentUtility.getTest().addScreenCapture(takeScreenShot((WebDriver) driver)));
-			} else {
-				System.out.println(" NO match Found");
-				ExtentUtility.getTest().log(LogStatus.FAIL, " Result = No Match Is Found ",
-						ExtentUtility.getTest().addScreenCapture(takeScreenShot((WebDriver) driver)));
-			}
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-	}
-
-	public void AppDetect_floatingVideoPlay() throws IOException, InterruptedException {
-		try {
-			int ret = 0;
-			for (int i = 0; i < 3; i++) {
-				String imageFolder;
-				int height = this.appiumDriver.manage().window().getSize().getHeight();
-				if (height == 1536 || height == 2048) {
-					imageFolder = "Error";
-				} else {
-					imageFolder = "Error1";
-				}
-				String filename = String.valueOf(imageFolder) + "/error.png";
-				File file1 = null;
-				String str1;
-				switch ((str1 = this.toolName).hashCode()) {
-				case 1256533886:
-					if (!str1.equals("Selenium"))
-						break;
-					file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-					break;
-				case 1967770400:
-					if (!str1.equals("Appium"))
-						break;
-					file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-					break;
-				}
-				FileUtils.copyFile(file1, new File(filename));
-				Mat img1 = Imgcodecs.imread(filename, 1);
-				Rect faceDetections = null;
-				if (height == 1536 || height == 2048) {
-					faceDetections = new Rect(800, 1600, 600, 400);
-				} else {
-					faceDetections = new Rect(600, 1900, 600, 400);
-				}
-				Mat img = new Mat(img1, faceDetections);
-				Imgcodecs.imwrite(String.valueOf(imageFolder) + "/error3.png", img);
-				ret = checkmotion(img);
-			}
-			if (ret == 0) {
-				System.out.println(
-						"Verify the Video motion in Screen View Mode - Video is not playing in Screen View Mode");
-				ExtentUtility.getTest().log(LogStatus.FAIL,
-						"Verify the Video motion in Screen View Mode - Video is not playing in Screen View Mode",
-						ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-			} else {
-				System.out
-						.println("Verify the Video motion in Screen View Mode - Video is playing in Screen View Mode");
-				ExtentUtility.getTest().log(LogStatus.PASS,
-						"Verify the Video motion in Screen View Mode - Video is playing in Screen View Mode",
-						ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-			}
-			image = null;
-			image1 = null;
-			image2 = null;
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
-
-	public void Appmatchimage(WebDriver driver, Mat templ, Point location, Dimension size) throws IOException {
-		int match = 0;
-		for (int k = 0; k < 5; k++) {
-			Point matchLoc;
-			String filename = "Errors/match2.png";
-			File src = (File) ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(src, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			CascadeClassifier faceDetector = new CascadeClassifier();
-			System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-			System.out.println("Running Template Matching__");
-			double left = location.x;
-			double top = location.y;
-			double bottom = (location.y + size.getHeight() - 100);
-			double right = (location.x + size.getWidth() - 130);
-			System.out.println("face detedffffff");
-			int result_cols = img1.cols() - templ.cols() + 1;
-			int result_rows = img1.rows() - templ.rows() + 1;
-			Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
-			System.out.println("face deted");
-			Rect faceDetections = new Rect((int) left, (int) top, (int) right, (int) bottom);
-			Mat img2 = new Mat(img1, faceDetections);
-			System.out.println("face deted");
-			String match_method = "Imgproc.TM_CCOEFF_NORMED";
-			Imgproc.matchTemplate(img2, templ, result, 5);
-			Imgproc.threshold(result, result, 0.5D, 1.0D, 3);
-			Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-			System.out.println("face deted111");
-			if (match_method == "Imgproc.TM_SQDIFF" || match_method == "Imgproc.TM_SQDIFF_NORMED") {
-				matchLoc = mmr.minLoc;
-			} else {
-				matchLoc = mmr.maxLoc;
-			}
-			System.out.println(matchLoc);
-			System.out.println(mmr.maxVal);
-			double threashhold = 0.7D;
-			if (mmr.maxVal > threashhold) {
-				System.out.println(mmr.maxVal);
-				System.out.println("match Found");
-				match = 1;
-				break;
-			}
-		}
-		if (match == 1) {
-			ExtentUtility.getTest().log(LogStatus.PASS, " Result = Match Is Found ",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot(driver)));
-		} else {
-			System.out.println(" NO match Found");
-			ExtentUtility.getTest().log(LogStatus.FAIL, " Result = No Match Is Found ",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot(driver)));
-		}
-	}
-
-	public void Appmatchimage(WebDriver driver, Mat templ, Mat temp2, Point location, Dimension size)
-			throws IOException {
-		int match = 0;
-		for (int k = 0; k < 5; k++) {
-			Point matchLoc;
-			String filename = "Errors/match2.png";
-			File src = (File) ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(src, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			CascadeClassifier faceDetector = new CascadeClassifier();
-			System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-			System.out.println("Running Template Matching__");
-			double left = location.x;
-			double top = location.y;
-			double bottom = (location.y + size.getHeight() - 100);
-			double right = (location.x + size.getWidth() - 130);
-			System.out.println("face detedffffff");
-			int result_cols = img1.cols() - templ.cols() + 1;
-			int result_rows = img1.rows() - templ.rows() + 1;
-			Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
-			System.out.println("face deted");
-			Rect faceDetections = new Rect((int) left, (int) top, (int) right, (int) bottom);
-			Mat img2 = new Mat(img1, faceDetections);
-			System.out.println("face deted");
-			String match_method = "Imgproc.TM_CCOEFF_NORMED";
-			Imgproc.matchTemplate(img2, templ, result, 5);
-			Imgproc.threshold(result, result, 0.5D, 1.0D, 3);
-			Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-			System.out.println("face deted111");
-			if (match_method == "Imgproc.TM_SQDIFF" || match_method == "Imgproc.TM_SQDIFF_NORMED") {
-				matchLoc = mmr.minLoc;
-			} else {
-				matchLoc = mmr.maxLoc;
-			}
-			System.out.println(matchLoc);
-			System.out.println(mmr.maxVal);
-			double threashhold = 0.7D;
-			if (mmr.maxVal > threashhold) {
-				System.out.println(mmr.maxVal);
-				System.out.println("match Found");
-				match = 1;
-				break;
-			}
-		}
-		if (match == 1) {
-			ExtentUtility.getTest().log(LogStatus.PASS, " Result = Match Is Found ",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot(driver)));
-		} else {
-			System.out.println(" NO match Found");
-			ExtentUtility.getTest().log(LogStatus.FAIL, " Result = No Match Is Found ",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot(driver)));
-		}
-	}
-
-	public void BlackScreen_Match(Point location, Dimension size) throws IOException {
-		String imageFolder;
-		int imageNum, height = this.appiumDriver.manage().window().getSize().getHeight();
-		if (height == 1536 || height == 2048) {
-			imageFolder = "images_tablet";
-			imageNum = 1;
-		} else {
-			imageFolder = "images_phone";
-			imageNum = 2;
-		}
-		Mat templ = Imgcodecs.imread(String.valueOf(imageFolder) + "/blackScreen.png", 1);
-		int match = 0;
-		String filename = String.valueOf(System.getProperty("user.dir")) + "/ReportGenerator/"
-				+ ExtentUtility.reportFolder + "/Screenshots/match" + imageNum + ".png";
-		for (int k = 0; k < 3; k++) {
-			String imageFolder1;
-			File src = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(src, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			CascadeClassifier faceDetector = new CascadeClassifier();
-			System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-			System.out.println("Running Template Matching");
-			double left = location.x;
-			double top = location.y;
-			double bottom = (location.y + size.getHeight());
-			double right = (location.x + size.getWidth());
-			Rect faceDetections = new Rect((int) left, (int) top, (int) right, (int) bottom);
-			System.out.println("left" + left + " top" + top + " right" + right + " bottom" + bottom);
-			Mat img2 = new Mat(img1, faceDetections);
-			if (height == 1536 || height == 2048) {
-				imageFolder1 = "Error";
-			} else {
-				imageFolder1 = "Error1";
-			}
-			Imgcodecs.imwrite(String.valueOf(imageFolder1) + "/screen" + k + ".png", img2);
-			int result_cols = img2.cols() - templ.cols() + 1;
-			int result_rows = img2.rows() - templ.rows() + 1;
-			Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
-			String match_method = "Imgproc.TM_CCOEFF_NORMED";
-			Imgproc.matchTemplate(img2, templ, result, 5);
-			Imgproc.threshold(result, result, 0.5D, 1.0D, 3);
-			Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-			if (match_method == "Imgproc.TM_SQDIFF" || match_method == "Imgproc.TM_SQDIFF_NORMED") {
-				Point matchLoc = mmr.minLoc;
-			} else {
-				Point matchLoc = mmr.maxLoc;
-			}
-			double threashhold = 0.7D;
-			if (mmr.maxVal > threashhold) {
-				System.out.println(mmr.maxVal);
-				System.out.println("BlackScreen Found");
-				match = 1;
-				break;
-			}
-		}
-		if (match == 1) {
-			ExtentUtility.getTest().log(LogStatus.INFO, "Verify Black Screen - Black Screen is displayed",
-					ExtentUtility.getTest().addScreenCapture(filename));
-		} else {
-			System.out.println("No match Found");
-			ExtentUtility.getTest().log(LogStatus.INFO, "Verify Black Screen - Black Screen is not displayed",
-					ExtentUtility.getTest().addScreenCapture(filename));
-		}
-	}
-
-	public void BlackScreen_Match_ios(Point location, Dimension size) throws IOException {
-		Mat templ = Imgcodecs.imread("images_ios/blackScreen1.png", 1);
-		int match = 0;
-		String filename = String.valueOf(System.getProperty("user.dir")) + "/ReportGenerator/"
-				+ ExtentUtility.reportFolder + "/Screenshots/match2.png";
-		for (int k = 0; k < 3; k++) {
-			File src = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(src, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			CascadeClassifier faceDetector = new CascadeClassifier();
-			System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-			System.out.println("Running Template Matching");
-			Rect faceDetections = new Rect(30, 30, 900, 1400);
-			Mat img2 = new Mat(img1, faceDetections);
-			Imgcodecs.imwrite("Errors/screen" + k + ".png", img2);
-			int result_cols = img2.cols() - templ.cols() + 1;
-			int result_rows = img2.rows() - templ.rows() + 1;
-			Mat result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
-			String match_method = "Imgproc.TM_CCOEFF_NORMED";
-			Imgproc.matchTemplate(img2, templ, result, 5);
-			Imgproc.threshold(result, result, 0.5D, 1.0D, 3);
-			Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-			if (match_method == "Imgproc.TM_SQDIFF" || match_method == "Imgproc.TM_SQDIFF_NORMED") {
-				Point matchLoc = mmr.minLoc;
-			} else {
-				Point matchLoc = mmr.maxLoc;
-			}
-			double threashhold = 0.7D;
-			if (mmr.maxVal > threashhold) {
-				System.out.println(mmr.maxVal);
-				System.out.println("BlackScreen Found");
-				match = 1;
-				break;
-			}
-		}
-		if (match == 1) {
-			ExtentUtility.getTest().log(LogStatus.INFO, "Verify Black Screen - Black Screen is displayed",
-					ExtentUtility.getTest().addScreenCapture(filename));
-		} else {
-			System.out.println("No match Found");
-			ExtentUtility.getTest().log(LogStatus.INFO, "Verify Black Screen - Black Screen is not displayed",
-					ExtentUtility.getTest().addScreenCapture(filename));
-		}
-	}
-
-	public void getScreenShot(AppiumDriver driver) throws IOException {
-		String filename = "Errors/error1.png";
-		File src = (File) driver.getScreenshotAs(OutputType.FILE);
-		FileUtils.copyFile(src, new File(filename));
-		Mat img1 = Imgcodecs.imread(filename, 1);
-	}
-
-	public void Detect_VideoPlay(WebDriver driver, Point location, Dimension size)
-			throws IOException, InterruptedException {
-		int ret = 0;
-		for (int i = 0; i < 6; i++) {
-			String filename = "Errors/error.png";
-			File src = (File) ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(src, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			double left = location.x;
-			double top = location.y;
-			double bottom = (location.y + size.getHeight() - 60);
-			double right = (location.x + size.getWidth() - 140);
-			CascadeClassifier faceDetector = new CascadeClassifier();
-			faceDetector.load("C:/opencv-2.4.10/opencv/sources/data/haarcascades/haarcascade_frontalface_alt.xml");
-			Rect faceDetections = new Rect((int) left, (int) top, (int) right, (int) bottom);
-			Mat img = new Mat(img1, faceDetections);
-			filename = "Errors/player" + i + ".png";
-			Imgcodecs.imwrite("Errors/player" + i + ".png", img);
-			Thread.sleep(3000L);
-			Mat img2 = Imgcodecs.imread(filename, 1);
-			ret = checkmotion(img2);
-		}
-		if (ret == 0) {
-			System.out.println("Video is not playing");
-			ExtentUtility.getTest().log(LogStatus.FAIL, " Result = Video is not Playing - FALSE ",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot(driver)));
-		} else {
-			System.out.println("Video is playing");
-			ExtentUtility.getTest().log(LogStatus.PASS, " Result = Video is  Playing - TRUE ",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot(driver)));
-		}
-		image = null;
-		image1 = null;
-		image2 = null;
-	}
-
-	public void Detect_VideoPause(WebDriver driver, Point location, Dimension size)
-			throws IOException, InterruptedException {
-		int ret = 0;
-		for (int i = 0; i < 6; i++) {
-			String filename = "Errors/error.png";
-			File src = (File) ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(src, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			double left = location.x;
-			double top = location.y;
-			double bottom = (location.y + size.getHeight() - 60);
-			double right = (location.x + size.getWidth() - 140);
-			CascadeClassifier faceDetector = new CascadeClassifier();
-			faceDetector.load("C:/opencv-2.4.10/opencv/sources/data/haarcascades/haarcascade_frontalface_alt.xml");
-			Rect faceDetections = new Rect((int) left, (int) top, (int) right, (int) bottom);
-			Mat img = new Mat(img1, faceDetections);
-			filename = "Errors/player" + i + ".png";
-			Imgcodecs.imwrite("Errors/player" + i + ".png", img);
-			Thread.sleep(3000L);
-			Mat img2 = Imgcodecs.imread(filename, 1);
-			ret = checkmotion(img2);
-		}
-		if (ret == 0) {
-			System.out.println("Video is not playing");
-			ExtentUtility.getTest().log(LogStatus.PASS, " Result = Video is not Playing - FALSE ",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot(driver)));
-		} else {
-			System.out.println("Video is playing");
-			ExtentUtility.getTest().log(LogStatus.FAIL, " Result = Video is  Playing - TRUE ",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot(driver)));
-		}
-		image = null;
-		image1 = null;
-		image2 = null;
-	}
 
 	public String takeScreenShot(WebDriver driver) throws IOException {
 		Calendar cal = Calendar.getInstance();
@@ -4897,161 +3460,10 @@ method to wait for element display as a web element
 		return (new File("D://" + ExtentUtility.reportFolder + "//Screenshots//image" + s + ".png")).getAbsolutePath();
 	}
 
-	public void AppMatch(WebElement element, AppiumDriver driver, Mat img2, Point location, Dimension size)
-			throws IOException, InterruptedException {
-		int l = 0, k = 0;
-		int match = 0;
-		for (k = 0; k < 10; k++) {
-			String filename = "Errors/error1.png";
-			File src = (File) driver.getScreenshotAs(OutputType.FILE);
-			FileUtils.copyFile(src, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			double left = location.x;
-			double top = location.y;
-			double bottom = (location.y + size.getHeight());
-			double right = (location.x + size.getWidth());
-			Rect faceDetections = new Rect(46, 650, 50, 50);
-			Mat img = new Mat(img1, faceDetections);
-			filename = "Errors/match1.png";
-			Imgcodecs.imwrite("Errors/match1.png", img);
-			Thread.sleep(1000L);
-			Mat img3 = Imgcodecs.imread(filename, 1);
-			FeatureDetector fd = FeatureDetector.create(11);
-			MatOfKeyPoint keyPointsLarge = new MatOfKeyPoint();
-			MatOfKeyPoint keyPointsSmall = new MatOfKeyPoint();
-			fd.detect(img3, keyPointsLarge);
-			fd.detect(img2, keyPointsSmall);
-			Mat descriptorsLarge = new Mat();
-			Mat descriptorsSmall = new Mat();
-			DescriptorExtractor extractor = DescriptorExtractor.create(5);
-			extractor.compute(img3, keyPointsLarge, descriptorsLarge);
-			extractor.compute(img2, keyPointsSmall, descriptorsSmall);
-			MatOfDMatch matches = new MatOfDMatch();
-			DescriptorMatcher matcher = DescriptorMatcher.create(5);
-			matcher.match(descriptorsLarge, descriptorsSmall, matches);
-			MatOfDMatch matchesFiltered = new MatOfDMatch();
-			List<DMatch> matchesList = matches.toList();
-			List<DMatch> bestMatches = new ArrayList<>();
-			Double max_dist = Double.valueOf(0.0D);
-			Double min_dist = Double.valueOf(100.0D);
-			for (int j = 0; j < matchesList.size(); j++) {
-				Double dist = Double.valueOf(((DMatch) matchesList.get(j)).distance);
-				if (dist.doubleValue() < min_dist.doubleValue() && dist.doubleValue() != 0.0D)
-					min_dist = dist;
-				if (dist.doubleValue() > max_dist.doubleValue())
-					max_dist = dist;
-			}
-			if (min_dist.doubleValue() > 50.0D)
-				System.out.println("No match found");
-			double threshold = 3.0D * min_dist.doubleValue();
-			double threshold2 = 2.0D * min_dist.doubleValue();
-			if (threshold > 75.0D) {
-				threshold = 75.0D;
-			} else if (threshold2 >= max_dist.doubleValue()) {
-				threshold = min_dist.doubleValue() * 1.1D;
-			} else if (threshold >= max_dist.doubleValue()) {
-				threshold = threshold2 * 1.4D;
-			}
-			System.out.println("Threshold : " + threshold);
-			for (int i = 0; i < matchesList.size(); i++) {
-				Double dist = Double.valueOf(((DMatch) matchesList.get(i)).distance);
-				if (dist.doubleValue() < threshold)
-					bestMatches.add(matches.toList().get(i));
-			}
-			matchesFiltered.fromList(bestMatches);
-			System.out.println("matchesFiltered.size() : " + matchesFiltered.size());
-			if (matchesFiltered.rows() >= 1) {
-				System.out.println("match found");
-				match = 1;
-				ExtentUtility.getTest().log(LogStatus.PASS, " Result =  Match Is Found ",
-						ExtentUtility.getTest().addScreenCapture(takeScreenShot((WebDriver) driver)));
-				break;
-			}
-			System.out.println("no match found");
-		}
-	}
+	
 
-	public String getresponse() {
-		String BaseURl = "http://10.242.193.101:3000/";
-		String url = "posts";
-		HttpResponse response = null;
-		DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
-		HttpGet get = new HttpGet(url);
-		get.addHeader("Content-Type", "application/json");
-		try {
-			response = defaultHttpClient.execute((HttpUriRequest) get);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		System.out.println("HTTP RESPONSE : " + response);
-		System.out.println(response.getStatusLine());
-		HttpEntity entity = response.getEntity();
-		String text = "";
-		try {
-			text = EntityUtils.toString(entity);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		System.out.println("text--" + text);
-		String responses = response.toString();
-		System.out.println(responses);
-		return responses;
-	}
-
-	public void AppDetect_VideoPause(int left, int top, int right, int bottom)
-			throws IOException, InterruptedException {
-		int ret = 0;
-		for (int i = 0; i < 3; i++) {
-			String filename = "Errors/error.png";
-			File file1 = null;
-			String str1;
-			switch ((str1 = this.toolName).hashCode()) {
-			case 1256533886:
-				if (!str1.equals("Selenium"))
-					break;
-				file1 = (File) this.remoteDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			case 1967770400:
-				if (!str1.equals("Appium"))
-					break;
-				file1 = (File) this.appiumDriver.getScreenshotAs(OutputType.FILE);
-				break;
-			}
-			FileUtils.copyFile(file1, new File(filename));
-			Mat img1 = Imgcodecs.imread(filename, 1);
-			Rect faceDetections = new Rect(left, top, right, bottom);
-			Mat img = new Mat(img1, faceDetections);
-			Imgcodecs.imwrite("Errors/error2.png", img);
-			ret = checkmotion(img);
-		}
-		if (ret == 0) {
-			System.out.println("Verify the Video motion when paused - Video is not playing");
-			ExtentUtility.getTest().log(LogStatus.PASS,
-					"Verify the Video motion when paused - Video is not Playing After tapping the Pause icon",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		} else {
-			System.out.println("Verify the Video motion when paused - Video is playing");
-			ExtentUtility.getTest().log(LogStatus.FAIL,
-					"Verify the Video motion when paused - Video is Playing After tapping the Pause icon",
-					ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
-		}
-		image = null;
-		image1 = null;
-		image2 = null;
-	}
-
-	public void dragAndDroplocation(double i, String fw_rw) throws Exception {
-		try {
-			TouchAction action = new TouchAction((PerformsTouchActions) this.appiumDriver);
-			fw_rw.equalsIgnoreCase("fw");
-		} catch (Exception exception) {
-		}
-	}
-
+	
+	@SuppressWarnings("rawtypes")
 	public static void swipeDowntoXPath(String xPath, AppiumDriver driver) {
 		boolean flag = true;
 		int count = 1;
@@ -5107,7 +3519,7 @@ method to wait for element display as a web element
 
 
 	public void swipeUp(String elementToBeDisplayed) throws Exception {
-		TouchAction action = new TouchAction((PerformsTouchActions) this.appiumDriver);
+		TouchAction action = new TouchAction((PerformsTouchActions) appiumDriver);
 		PointOption p1 = new PointOption();
 		PointOption p2 = new PointOption();
 		int startPos = 10000;
@@ -5135,7 +3547,7 @@ method to wait for element display as a web element
 	
 	
 	public void swipeDownWithWhile(String elementToBeDisplayed) throws Exception {
-		TouchAction action = new TouchAction((PerformsTouchActions) this.appiumDriver);
+		TouchAction action = new TouchAction((PerformsTouchActions) appiumDriver);
 		PointOption p1 = new PointOption();
 		PointOption p2 = new PointOption();
 		int startPos = 900;
@@ -5165,14 +3577,14 @@ method to wait for element display as a web element
 		WebDriverWait wait, waitSelenium;
 		String str;
 	
-		 		wait = new WebDriverWait((WebDriver) this.appiumDriver, 0L);
+		 		wait = new WebDriverWait((WebDriver) appiumDriver, 0L);
 		 		wait.until((Function) ExpectedConditions.visibilityOfElementLocated(locator));
-		 		this.appiumDriver.findElement(locator).click();
+		 		appiumDriver.findElement(locator).click();
 				System.out.println("Clicking on Element Successful : " + elementName);
 		 	}
 
 public void swipeDownWithIf(String elementToBeDisplayed,int startPos,int endPos) throws Exception {
-		TouchAction action = new TouchAction((PerformsTouchActions) this.appiumDriver);
+		TouchAction action = new TouchAction((PerformsTouchActions) appiumDriver);
 		PointOption p1 = new PointOption();
 		PointOption p2 = new PointOption();
 		int counter=0;
@@ -5209,7 +3621,7 @@ public void scrollUpMethod2(String elementToBeDisplayed) throws Exception {
 	}
 	
 	public void swipeDownWithIfByLoc(By elementToBeDisplayed,int startPos,int endPos) throws Exception {
-		TouchAction action = new TouchAction((PerformsTouchActions) this.appiumDriver);
+		TouchAction action = new TouchAction((PerformsTouchActions) appiumDriver);
 		PointOption p1 = new PointOption();
 		PointOption p2 = new PointOption();
 		for (int i = 0; i <= 5; i++) {
@@ -5245,7 +3657,7 @@ public void scrollUpMethod2(String elementToBeDisplayed) throws Exception {
 	
 	
 	public void swipeDownLargeForNTimes(int noOfSwipe) throws Exception {
-		TouchAction action = new TouchAction((PerformsTouchActions) this.appiumDriver);
+		TouchAction action = new TouchAction((PerformsTouchActions) appiumDriver);
 		PointOption p1 = new PointOption();
 		PointOption p2 = new PointOption();
 		int startPos = 850;
@@ -5442,8 +3854,9 @@ public void scrollUpMethod2(String elementToBeDisplayed) throws Exception {
 	}
 	
 	public void reloadPgIfBtnNotDisp(String eleXpth,String urlBar,String goKey) throws Exception{
-			if(!isElementDisplayed(9, eleXpth, "checkout button")) {
-				this.click(urlBar, "click On searchBar");
+			if(!isElementDisplayed(5, eleXpth, "checking if the button is displayed")) {
+				WebElement urlBArIOS = appiumDriver.findElement(By.xpath(urlBar));
+				urlBArIOS.click();
 				this.clickWithWait(goKey, "click on go button Android Key Board",6);
 	}
 		}
@@ -5481,4 +3894,45 @@ public void scrollUpMethod2(String elementToBeDisplayed) throws Exception {
 		}
 	}
 	
+	public void convertStringToArray(String url) throws Exception {
+		try {
+		String[] urlArray = url.split("://");
+		String colonKey = "//*[@text=':']";
+		String forSlashKey = "//*[@text='/']";
+		String dotKey = "//*[@text='.']";
+		String keyForSpecChar = "//*[@text='numbers']";
+		String keyForLetters = "//*[@text='letters']";
+		char[] charArray1 = urlArray[0].toCharArray();
+		for(char x : charArray1) {
+			String xpath = "//*[@text='"+x+"']";
+			appiumDriver.findElement(By.xpath(xpath)).click();	
+		}		
+		appiumDriver.findElement(By.xpath(keyForSpecChar)).click();	
+		appiumDriver.findElement(By.xpath(colonKey)).click();	
+		appiumDriver.findElement(By.xpath(forSlashKey)).click();	
+		appiumDriver.findElement(By.xpath(forSlashKey)).click();	
+		appiumDriver.findElement(By.xpath(keyForLetters)).click();	
+		String[] newUrlArr = urlArray[1].split("\\.");
+		for(int i=0;i<newUrlArr.length;i++) {
+			char[] charArray2 = newUrlArr[i].toCharArray();	
+			for(char y : charArray2) {
+				String xpath = "//*[@text='"+y+"']";
+				appiumDriver.findElement(By.xpath(xpath)).click();
+			}
+			if(i< newUrlArr.length-1) {	
+				appiumDriver.findElement(By.xpath(dotKey)).click();	
+			}
+		}
+		}catch(Exception e) {
+			
+		}
+	}	
+	
+	
+	public WebElement findElementByXpath(String xpath,String elementName) throws IOException {
+		WebElement ele = appiumDriver.findElement(By.xpath(xpath));
+		ExtentUtility.getTest().log(LogStatus.PASS, "Element found..." + elementName + " successful",
+				ExtentUtility.getTest().addScreenCapture(takeScreenShot()));
+		return ele;
+	}
 	}
